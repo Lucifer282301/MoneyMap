@@ -1,2 +1,2 @@
-# financeFlow
-Track Expenses. Manage Budgets. Grow Financially.
+# MoneyMap
+Visualize, Track, and Control Your Finances.
