@@ -20,6 +20,7 @@ import {
   updateTransactionService,
 } from "../services/transaction.service";
 import { TransactionTypeEnum } from "../models/transaction.model";
+import { ErrorCodeEnum } from "../enums/error-code.enum";
 
 export const createTransactionController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -151,6 +152,13 @@ export const bulkTransactionController = asyncHandler(
 export const scanReceiptController = asyncHandler(
   async (req: Request, res: Response) => {
     const file = req?.file;
+
+    if (!file) {
+      return res.status(HTTPSTATUS.BAD_REQUEST).json({
+        message: "Receipt file is required",
+        errorCode: ErrorCodeEnum.VALIDATION_ERROR,
+      });
+    }
 
     const result = await scanReceiptService(file);
 
