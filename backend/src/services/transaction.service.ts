@@ -276,10 +276,8 @@ export const scanReceiptService = async (
 
   try {
     if (!file.path) {
-      throw new BadRequestException("failed to upload file");
+      throw new BadRequestException("Failed to upload file");
     }
-
-    console.log(file.path);
 
     const responseData = await axios.get(file.path, {
       responseType: "arraybuffer",
@@ -309,17 +307,13 @@ export const scanReceiptService = async (
     const cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
 
     if (!cleanedText) {
-      return {
-        error: "Could not read receipt content",
-      };
+      throw new BadRequestException("Could not read receipt content");
     }
 
     const data = JSON.parse(cleanedText);
 
     if (!data.amount || !data.date) {
-      return {
-        error: "Receipt missing required information",
-      };
+      throw new BadRequestException("Receipt missing required information");
     }
 
     return {
@@ -333,6 +327,6 @@ export const scanReceiptService = async (
       receiptUrl: file.path,
     };
   } catch (error) {
-    return { error: "Receipt scanning  service unavailable" };
+    throw error;
   }
 };

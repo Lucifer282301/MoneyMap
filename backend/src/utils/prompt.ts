@@ -9,7 +9,7 @@ Analyze this receipt image (base64 encoded) and extract transaction details matc
   "date": "ISO date string",  // Transaction date in YYYY-MM-DD format
   "description": "string",    // Items purchased summary (max 50 words)
   "category": "string",       // category of the transaction 
-  "type": "EXPENSE"           // Always "EXPENSE" for receipts
+  "type": "EXPENSE",          // Always "EXPENSE" for receipts
   "paymentMethod": "string",  // One of: ${Object.values(PaymentMethodEnum).join(",")}
 }
 
