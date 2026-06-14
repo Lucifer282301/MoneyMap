@@ -16,6 +16,7 @@ import {
   duplicateTransactionService,
   getAllTransactionService,
   getTransactionByIdService,
+  scanReceiptService,
   updateTransactionService,
 } from "../services/transaction.service";
 import { TransactionTypeEnum } from "../models/transaction.model";
@@ -143,6 +144,19 @@ export const bulkTransactionController = asyncHandler(
     return res.status(HTTPSTATUS.OK).json({
       message: "Bulk transaction inserted successfully",
       ...result,
+    });
+  },
+);
+
+export const scanReceiptController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const file = req?.file;
+
+    const result = await scanReceiptService(file);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: "Receipt scanned successfully",
+      data: result,
     });
   },
 );
