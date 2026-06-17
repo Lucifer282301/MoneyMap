@@ -9,11 +9,12 @@ import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { BadRequestException } from "./utils/app-error";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import connectDatabase from "./config/database.config";
-import authRouter from "./routes/auth.route";
-import userRouter from "./routes/user.route";
+import authRoutes from "./routes/auth.route";
 import { passportAuthenticateJwt } from "./config/passport.config";
-import transactionRouter from "./routes/transaction.route";
+import userRoutes from "./routes/user.route";
+import transactionRoutes from "./routes/transaction.route";
 import { initializeCrons } from "./crons";
+import reportRoutes from "./routes/report.routes";
 
 const app = express();
 const BASE_PATH = ENV.BASE_PATH;
@@ -35,14 +36,15 @@ app.get(
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     throw new BadRequestException("This is a error");
     res.status(HTTPSTATUS.OK).json({
-      message: "Hello Subscribe to the channel.",
+      message: "Hello World.",
     });
   }),
 );
 
-app.use(`${BASE_PATH}/auth`, authRouter);
-app.use(`${BASE_PATH}/user`, passportAuthenticateJwt, userRouter);
-app.use(`${BASE_PATH}/transaction`, passportAuthenticateJwt, transactionRouter);
+app.use(`${BASE_PATH}/auth`, authRoutes);
+app.use(`${BASE_PATH}/user`, passportAuthenticateJwt, userRoutes);
+app.use(`${BASE_PATH}/transaction`, passportAuthenticateJwt, transactionRoutes);
+app.use(`${BASE_PATH}/report`, passportAuthenticateJwt, reportRoutes);
 
 app.use(errorHandler);
 
