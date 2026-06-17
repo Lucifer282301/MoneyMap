@@ -26,6 +26,10 @@ const userSchema = new Schema<UserDocument>(
       trim: true,
       lowercase: true,
     },
+    profilePicture: {
+      type: String,
+      default: null,
+    },
     password: {
       type: String,
       select: true,
