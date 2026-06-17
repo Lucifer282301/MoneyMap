@@ -4,9 +4,9 @@ import {
   registerController,
 } from "../controllers/auth.controller";
 
-const authRouter = Router();
+const authRoutes = Router();
 
-authRouter.post("/register", registerController);
-authRouter.post("/login", loginController);
+authRoutes.post("/register", registerController);
+authRoutes.post("/login", loginController);
 
-export default authRouter;
+export default authRoutes;
