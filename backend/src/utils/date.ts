@@ -25,11 +25,12 @@ export const getDateRange = (
 
   const now = new Date();
 
-  const yesterday = subDays(now.setHours(0, 0, 0, 0), 1);
+  // const yesterday = subDays(now.setHours(0, 0, 0, 0), 1);
+  const today = endOfDay(now);
 
   const last30Days = {
-    from: subDays(yesterday, 29),
-    to: yesterday,
+    from: subDays(today, 29),
+    to: today,
     value: DateRangeEnum.LAST_30_DAYS,
     label: "Last 30 Days",
   };
