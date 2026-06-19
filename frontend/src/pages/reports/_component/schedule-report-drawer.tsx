@@ -15,6 +15,10 @@ import ScheduleReportForm from "./schedule-report-form";
 const ScheduleReportDrawer = () => {
   const [open, setOpen] = useState(false);
 
+  const onCloseDrawer = () => {
+    setOpen(false);
+  };
+
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -39,7 +43,7 @@ const ScheduleReportDrawer = () => {
           </DrawerClose>
         </DrawerHeader>
 
-        <ScheduleReportForm />
+        <ScheduleReportForm {...{ onCloseDrawer }} />
       </DrawerContent>
     </Drawer>
   );

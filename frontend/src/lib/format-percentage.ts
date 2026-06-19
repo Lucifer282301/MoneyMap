@@ -1,21 +1,26 @@
-type FormatPercentageOptions = {
-  decimalPlaces?: number;
-  addPrefix?: boolean;
-};
-
 export const formatPercentage = (
   value: number,
-  { decimalPlaces = 1, addPrefix = false }: FormatPercentageOptions = {},
+  options: {
+    decimalPlaces?: number;
+    showSign?: boolean;
+    isExpense?: boolean;
+  } = {},
 ): string => {
-  if (!Number.isFinite(value)) {
-    return "0%";
-  }
+  const { decimalPlaces = 1, showSign = false, isExpense = false } = options;
 
-  const formattedValue = new Intl.NumberFormat("en-US", {
+  if (!Number.isFinite(value)) return "0%";
+
+  const formatted = new Intl.NumberFormat("en-US", {
     style: "percent",
     minimumFractionDigits: decimalPlaces,
     maximumFractionDigits: decimalPlaces,
-  }).format(value / 100);
+  }).format(Math.abs(value) / 100);
 
-  return addPrefix && value > 0 ? `+${formattedValue}` : formattedValue;
+  if (!showSign) return formatted;
+
+  if (isExpense) {
+    return value <= 0 ? `+${formatted}` : `-${formatted}`;
+  }
+
+  return value >= 0 ? `+${formatted}` : `-${formatted}`;
 };
