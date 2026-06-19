@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { format } from "date-fns";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -46,30 +46,22 @@ const chartConfig = {
 
 const DashboardDataChart = ({ data = [], dateRange }: PropsType) => {
   const isMobile = useIsMobile();
-  const [, setTimeRange] = useState("90d");
 
-  useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d");
-    }
-  }, [isMobile]);
+  const sortedData = React.useMemo(() => {
+    return [...data]
+      .sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateA.getTime() - dateB.getTime();
+      })
+      .map((item) => ({
+        ...item,
+        // Format date as YYYY-MM-DD for consistent sorting
+        formattedDate: format(new Date(item.date), "yyyy-MM-dd"),
+      }));
+  }, [data]);
 
-  // const CustomTooltip = ({ active, payload }: any) => {
-  //     if (active && payload && payload.length) {
-  //       const data = payload[0].payload;
-  //       return (
-  //         <div className="bg-white p-3 rounded-lg shadow-md border border-gray-100">
-  //           <div className="flex items-center gap-2 mb-1">
-  //             <div className="h-3 w-3 rounded-full" style={{ backgroundColor: data.color }}></div>
-  //             <p className="font-medium">{data.name}</p>
-  //           </div>
-  //           <p className="text-muted-foreground text-sm">${data.value.toLocaleString()}</p>
-  //           <p className="text-sm font-medium">{data.percentage}% of total</p>
-  //         </div>
-  //       );
-  //     }
-  //     return null;
-  //   };
+  console.log(sortedData, "sortedData");
 
   return (
     <Card className="!shadow-none border-1 border-gray-100 dark:border-border !pt-0">
@@ -151,7 +143,7 @@ const DashboardDataChart = ({ data = [], dateRange }: PropsType) => {
                 tickMargin={8}
                 minTickGap={32}
                 tickFormatter={(value) =>
-                  format(new Date(value), isMobile ? "MMM d" : "MMMM d")
+                  format(new Date(value), isMobile ? "MMM d" : "MMMM d, yyyy")
                 }
               />
               <ChartTooltip
