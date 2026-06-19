@@ -3,6 +3,7 @@ import { RootState } from "./store";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
+  credentials: "include",
 
   prepareHeaders: (headers, { getState }) => {
     const auth = (getState() as RootState).auth;
@@ -17,6 +18,6 @@ export const apiClient = createApi({
   reducerPath: "api",
   baseQuery: baseQuery,
   refetchOnMountOrArgChange: true,
-  tagTypes: [],
+  tagTypes: ["transactions", "analytics", "billingSubscription"],
   endpoints: () => ({}),
 });

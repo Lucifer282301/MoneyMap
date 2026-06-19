@@ -8,9 +8,11 @@ import { Button } from "../ui/button";
 import { Sheet, SheetContent } from "../ui/sheet";
 import { UserNav } from "./user-nav";
 import LogoutDialog from "./logout-dialog";
+import { useTypedSelector } from "@/app/hook";
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const { user } = useTypedSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
@@ -37,7 +39,7 @@ const Navbar = () => {
     <>
       <header
         className={cn(
-          "w-full px-4 py-3 pb-3 lg:px-14 bg-[#1a1e2a] text-white",
+          "w-full px-4 py-3 pb-3 lg:px-14 bg-[var(--secondary-dark-color)] text-white ",
           pathname === PROTECTED_ROUTES.OVERVIEW && "!pb-3",
         )}
       >
@@ -109,7 +111,11 @@ const Navbar = () => {
 
             {/* Right side - User actions */}
             <div className="flex items-center space-x-4">
-              <UserNav onLogout={() => setIsLogoutDialogOpen(true)} />
+              <UserNav
+                userName={user?.name || ""}
+                profilePicture={user?.profilePicture || ""}
+                onLogout={() => setIsLogoutDialogOpen(true)}
+              />
             </div>
           </div>
         </div>
