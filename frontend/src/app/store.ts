@@ -12,7 +12,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import { apiClient } from "./api-client";
-import { encryptTransform } from "redux-persist-transform-encrypt";
+// import { encryptTransform } from "redux-persist-transform-encrypt";
 
 type RootReducerType = ReturnType<typeof rootReducer>;
 
@@ -20,14 +20,14 @@ const persistConfig = {
   key: "root",
   storage,
   blacklist: [apiClient.reducerPath],
-  transforms: [
-    encryptTransform({
-      secretKey: import.meta.env.VITE_REDUX_PERSIST_SECRET_KEY!,
-      onError: function (error) {
-        console.error("Encryption error:", error);
-      },
-    }),
-  ],
+  // transforms: [
+  //   encryptTransform({
+  //     secretKey: import.meta.env.VITE_REDUX_PERSIST_SECRET_KEY!,
+  //     onError: function (error) {
+  //       console.error("Encryption error:", error);
+  //     },
+  //   }),
+  // ],
 };
 
 const rootReducer = combineReducers({
