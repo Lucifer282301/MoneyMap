@@ -15,9 +15,10 @@ interface ItemPropsType {
 const Settings = () => {
   const sidebarNavItems = [
     { title: "Account", href: PROTECTED_ROUTES.SETTINGS },
-    { title: "Billings", href: PROTECTED_ROUTES.SETTINGS_BILLING },
     { title: "Appearance", href: PROTECTED_ROUTES.SETTINGS_APPEARANCE },
+    { title: "Billings", href: PROTECTED_ROUTES.SETTINGS_BILLING },
   ];
+
   return (
     <PageLayout
       title="Settings"
@@ -28,14 +29,12 @@ const Settings = () => {
         <CardContent>
           <div
             className="flex flex-col space-y-8 lg:flex-row lg:space-x-12
-            lg:space-y-0 pb-10 pt-2"
+         lg:space-y-0 pb-10 pt-2"
           >
             <aside className="mr-4 lg:w-1/5">
               <SidebarNav items={sidebarNavItems} />
             </aside>
-
             {/* <Separator orientation="vertical" className=" !h-[500px] !border-gray-200" /> */}
-
             <div className="flex-1 lg:max-w-2xl">
               <Outlet />
             </div>
@@ -49,7 +48,7 @@ const Settings = () => {
 const SidebarNav = ({ items }: ItemPropsType) => {
   const { pathname } = useLocation();
   return (
-    <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+    <nav className={"flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1"}>
       {items.map((item) => (
         <Link
           key={item.href}

@@ -121,14 +121,14 @@ const TransactionForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-4">
           <div className="space-y-6">
-             {/* Receipt Upload Section */}
+            {/* Receipt Upload Section */}
             <ReceiptScanner
               onScanComplete={handleScanComplete}
               onLoadingChange={setIsScanning}
             />
 
             {/* Transaction Type */}
-             <FormField
+            <FormField
               control={form.control}
               name="type"
               render={({ field }) => (
@@ -147,7 +147,8 @@ const TransactionForm = () => {
                         flex items-center space-x-2 rounded-md 
                         shadow-sm border p-2 flex-1 justify-center 
                         `,
-                        field.value === TRANSACTION_OPTIONS.INCOME && "!border-primary"
+                        field.value === TRANSACTION_OPTIONS.INCOME &&
+                          "!border-primary",
                       )}
                     >
                       <RadioGroupItem
@@ -165,7 +166,8 @@ const TransactionForm = () => {
                         flex items-center space-x-2 rounded-md 
                         shadow-sm border p-2 flex-1 justify-center 
                         `,
-                        field.value === TRANSACTION_OPTIONS.EXPENSE && "!border-primary"
+                        field.value === TRANSACTION_OPTIONS.EXPENSE &&
+                          "!border-primary",
                       )}
                     >
                       <RadioGroupItem
@@ -212,10 +214,9 @@ const TransactionForm = () => {
                       <CurrencyInputField
                         {...field}
                         disabled={isScanning}
-                        onValueChange={(value) => field.onChange(value || '')}
+                        onValueChange={(value) => field.onChange(value || "")}
                         placeholder="0.00"
                         prefix="$"
-
                       />
                     </div>
                   </FormControl>
@@ -268,7 +269,7 @@ const TransactionForm = () => {
                           variant={"outline"}
                           className={cn(
                             "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                            !field.value && "text-muted-foreground",
                           )}
                         >
                           {field.value ? (
@@ -349,7 +350,7 @@ const TransactionForm = () => {
                         if (!checked) {
                           form.setValue(
                             "frequency",
-                            TRANSACTION_FREQUENCY.ONE_TIME
+                            TRANSACTION_FREQUENCY.ONE_TIME,
                           );
                         }
                       }}
@@ -359,7 +360,7 @@ const TransactionForm = () => {
               )}
             />
 
-           {form.watch("isRecurring") && form.getValues().isRecurring && (
+            {form.watch("isRecurring") && form.getValues().isRecurring && (
               <FormField
                 control={form.control}
                 name="frequency"
@@ -395,7 +396,7 @@ const TransactionForm = () => {
                   </FormItem>
                 )}
               />
-            )} 
+            )}
 
             {/* Description */}
             <FormField
@@ -418,7 +419,7 @@ const TransactionForm = () => {
             />
           </div>
 
-          <div className="sticky bottom-0 bg-white pb-2">
+          <div className="sticky bottom-0 bg-white dark:bg-background pb-2">
             <Button type="submit" className="w-full" disabled={isScanning}>
               Save
             </Button>

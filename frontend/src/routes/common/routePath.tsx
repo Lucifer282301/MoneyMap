@@ -4,7 +4,7 @@ export const AUTH_ROUTES = {
 };
 
 export const PROTECTED_ROUTES = {
-  DASHBOARD: "/dashboard",
+  OVERVIEW: "/overview",
   TRANSACTIONS: "/transactions",
   REPORTS: "/reports",
   SETTINGS: "/settings",

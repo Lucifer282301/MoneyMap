@@ -1,25 +1,34 @@
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { ChevronDown, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const UserNav = () => {
+const UserNav = ({ onLogout }: { onLogout: () => void }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-10 w-10 !cursor-pointer">
+        <Button
+          variant="ghost"
+          className="relative !bg-transparent h-8 w-8 rounded-full !gap-0"
+        >
+          <Avatar className="h-10 w-10 !cursor-pointer ">
+            <AvatarImage src="" className="!cursor-pointer " />
             <AvatarFallback
               className="!bg-[var(--secondary-dark-color)] border !border-gray-700
                !text-white"
             >
-              SC
+              AK
             </AvatarFallback>
           </Avatar>
+          <ChevronDown className="!w-3 !h-3 ml-1 text-white" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -29,9 +38,22 @@ const UserNav = () => {
         align="end"
         forceMount
       >
-        <DropdownMenuItem className="hover:!bg-gray-800 hover:!text-white">
-          Log out
-        </DropdownMenuItem>
+        <DropdownMenuLabel className="flex flex-col items-start gap-1">
+          <span className="font-semibold">Avinash Kumar</span>
+          <span className="text-[13px] text-gray-400 font-light">
+            Free Trial (2 days left)
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator className="!bg-gray-700" />
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            className="hover:!bg-gray-800 hover:!text-white"
+            onClick={onLogout}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Log out
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

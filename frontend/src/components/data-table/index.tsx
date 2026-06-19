@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface FilterOption {
   key: string;
@@ -42,6 +43,7 @@ interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   searchPlaceholder?: string;
   filters?: FilterOption[];
+  className?: string;
   onSearch?: (term: string) => void;
   onFilterChange?: (filters: Record<string, string>) => void;
   onBulkDelete?: (selectedIds: string[]) => void;
@@ -54,6 +56,7 @@ export const DataTable = <TData,>({
   columns,
   searchPlaceholder = "Search...",
   filters = [],
+  className,
   onSearch,
   onFilterChange,
   onBulkDelete,
@@ -105,11 +108,13 @@ export const DataTable = <TData,>({
     setFilterValues({});
     onSearch?.("");
     onFilterChange?.({});
+    setRowSelection({});
   };
 
   const handleDelete = () => {
     const selectedIds = selectedRows.map((row) => (row.original as any).id);
     onBulkDelete?.(selectedIds);
+    setRowSelection({});
   };
 
   return (
@@ -149,7 +154,9 @@ export const DataTable = <TData,>({
             </Select>
           ))}
 
-          {(searchTerm || Object.keys(filterValues).length > 0) && (
+          {(searchTerm ||
+            Object.keys(rowSelection).length > 0 ||
+            Object.keys(filterValues).length > 0) && (
             <Button variant="ghost" onClick={handleClear} className="h-8 px-2">
               <X className="h-4 w-4 mr-1" />
               Reset
@@ -166,7 +173,7 @@ export const DataTable = <TData,>({
       </div>
 
       {/* Table */}
-      <div className="rounded-md border overflow-x-auto">
+      <div className={cn("rounded-md border overflow-x-auto", className)}>
         <Table>
           <TableHeader className="sticky top-0 bg-muted z-10">
             {table.getHeaderGroups().map((group) => (
