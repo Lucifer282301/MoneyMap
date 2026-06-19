@@ -1,5 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangeEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTypedSelector } from "@/app/hook";
+import { Loader } from "lucide-react";
 
 const accountFormSchema = z.object({
   name: z
@@ -22,49 +24,61 @@ const accountFormSchema = z.object({
     .min(2, {
       message: "Name must be at least 2 characters.",
     })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  dob: z.date({
-    required_error: "A date of birth is required.",
-  }),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
+    .optional(),
+  profilePicture: z.string(),
 });
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
-const defaultValues: Partial<AccountFormValues> = {
-  name: "Samuel John",
-};
+// const defaultValues: Partial<AccountFormValues> = {
+//   name: "Samuel John",
+// };
 
 export const AccountForm = () => {
+  //const dispatch = useAppDispatch();
+  const { user } = useTypedSelector((state) => state.auth);
+
+  const [file, setFile] = useState<File | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  const isLoading = false;
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
-    defaultValues,
+    defaultValues: {
+      name: user?.name || "",
+      profilePicture: user?.profilePicture || "",
+    },
   });
 
-  const onSubmit = (data: AccountFormValues) => {
-    console.log(data);
-    toast.success("You submitted the following values:");
+  const onSubmit = (values: AccountFormValues) => {
+    console.log(values);
+    if (isLoading) return;
+
+    const formData = new FormData();
+    formData.append("name", values.name || "");
+    if (file) formData.append("profilePicture", file);
+
+    toast.success("Account updated successfully");
   };
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setAvatarUrl(result);
-      };
-
-      reader.readAsDataURL(file);
+    if (!file) {
+      toast.error("Please select a file");
+      return;
     }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    setFile(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      setAvatarUrl(result);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -72,15 +86,13 @@ export const AccountForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="flex flex-col items-start space-y-4">
           <FormLabel>Profile Picture</FormLabel>
-
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={avatarUrl || ""} />
+              <AvatarImage src={avatarUrl || user?.profilePicture || ""} />
               <AvatarFallback className="text-2xl">
                 {form.watch("name")?.charAt(0)?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
-
             <div className="flex flex-col gap-2">
               <Input
                 type="file"
@@ -88,31 +100,29 @@ export const AccountForm = () => {
                 onChange={handleAvatarChange}
                 className="max-w-[250px]"
               />
-
               <p className="text-xs text-muted-foreground">
-                Recommended: Square JPG, PNG, or GIF, at least 300x300px.
+                Recommended: Square JPG, PNG, at least 300x300px.
               </p>
             </div>
           </div>
         </div>
-
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
-
               <FormControl>
                 <Input placeholder="Your name" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <Button type="submit">Update account</Button>
+        <Button disabled={isLoading} type="submit">
+          {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+          Update account
+        </Button>
       </form>
     </Form>
   );

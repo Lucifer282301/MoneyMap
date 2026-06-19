@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import ReceiptScanner from "./receipt-scanner";
+import { AIScanReceiptData } from "@/features/transaction/transactionType";
 
 import {
   TRANSACTION_FREQUENCY,
@@ -66,6 +67,7 @@ const formSchema = z.object({
     .nullable()
     .optional(),
   description: z.string().optional(),
+  receiptUrl: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -73,8 +75,9 @@ type FormValues = z.infer<typeof formSchema>;
 const TransactionForm = (props: {
   isEdit?: boolean;
   transactionId?: string;
+  onCloseDrawer?: () => void;
 }) => {
-  const { isEdit = false, transactionId } = props;
+  const { onCloseDrawer, isEdit = false, transactionId } = props;
   const [isScanning, setIsScanning] = useState(false);
 
   const form = useForm<FormValues>({
@@ -89,6 +92,7 @@ const TransactionForm = (props: {
       isRecurring: false,
       frequency: null,
       description: "",
+      receiptUrl: "",
     },
   });
 
@@ -116,25 +120,43 @@ const TransactionForm = (props: {
     }),
   );
 
-  const handleScanComplete = (data: {
-    amount?: number;
-    date?: Date;
-    merchant?: string;
-  }) => {
-    if (data.amount) {
-      form.setValue("amount", data.amount.toString());
-    }
-    if (data.date) {
-      form.setValue("date", data.date);
-    }
-    if (data.merchant) {
-      form.setValue("title", data.merchant);
-    }
+  const handleScanComplete = (data: AIScanReceiptData) => {
+    form.reset({
+      ...form.getValues(),
+      title: data.title || "",
+      amount: data.amount.toString(),
+      type: data.type || TRANSACTION_OPTIONS.EXPENSE,
+      category: data.category?.toLowerCase() || "",
+      date: new Date(data.date),
+      paymentMethod: data.paymentMethod || "",
+      isRecurring: false,
+      frequency: null,
+      description: data.description || "",
+      receiptUrl: data.receiptUrl || "",
+    });
   };
 
   // Handle form submission
-  const onSubmit = (data: FormValues) => {
-    console.log("Form submitted:", data);
+  const onSubmit = (values: FormValues) => {
+    // if (isCreating || isUpdating) return;
+    console.log("Form submitted:", values);
+    const payload = {
+      title: values.title,
+      type: values.type,
+      category: values.category,
+      paymentMethod: values.paymentMethod,
+      description: values.description || "",
+      amount: Number(values.amount),
+      date: values.date.toISOString(),
+      isRecurring: values.isRecurring || false,
+      recurringInterval: values.frequency || null,
+    };
+    if (isEdit && transactionId) {
+      console.log("Edit transaction:", payload);
+      onCloseDrawer?.();
+      return;
+    }
+    //Create transaction
   };
 
   return (
@@ -145,6 +167,7 @@ const TransactionForm = (props: {
             {/* Receipt Upload Section */}
             {!isEdit && (
               <ReceiptScanner
+                loadingChange={isScanning}
                 onScanComplete={handleScanComplete}
                 onLoadingChange={setIsScanning}
               />
@@ -256,7 +279,12 @@ const TransactionForm = (props: {
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <SingleSelector
-                    value={CATEGORIES.find((opt) => opt.value === field.value)}
+                    value={
+                      CATEGORIES.find((opt) => opt.value === field.value) ||
+                      field.value
+                        ? { value: field.value, label: field.value }
+                        : undefined
+                    }
                     onChange={(option) => field.onChange(option?.value)}
                     options={CATEGORIES}
                     placeholder="Select or type a category"
@@ -305,9 +333,7 @@ const TransactionForm = (props: {
                           console.log(date);
                           field.onChange(date); // This updates the form value
                         }}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
+                        disabled={(date) => date < new Date("2023-01-01")}
                         initialFocus
                       />
                     </PopoverContent>

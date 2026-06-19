@@ -2,14 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Clock, RefreshCw } from "lucide-react";
 import { REPORT_STATUS, ReportStatusType } from "@/constants";
-
-export type ReportType = {
-  id: number;
-  period: string;
-  sentDate: string | Date;
-  status: ReportStatusType;
-  recipientEmail?: string;
-};
+import { ReportType } from "@/features/report/reportType";
 
 export const reportColumns: ColumnDef<ReportType>[] = [
   {
