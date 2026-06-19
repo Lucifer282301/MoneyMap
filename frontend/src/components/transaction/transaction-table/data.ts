@@ -10,7 +10,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_1",
     date: new Date(2023, 5, 15),
-    description: "Freelance Payment",
+    title: "Freelance Payment",
     amount: 1200,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Freelance",
@@ -21,7 +21,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_2",
     date: new Date(2023, 5, 16),
-    description: "Grocery Store",
+    title: "Grocery Store",
     amount: 85.5,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Food",
@@ -31,7 +31,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_3",
     date: new Date(2023, 5, 17),
-    description: "Electric Bill",
+    title: "Electric Bill",
     amount: 75.2,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Utilities",
@@ -41,7 +41,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_4",
     date: new Date(2023, 5, 18),
-    description: "Consulting Work",
+    title: "Consulting Work",
     amount: 500,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Services",
@@ -51,7 +51,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_5",
     date: new Date(2023, 5, 19),
-    description: "Coffee Shop",
+    title: "Coffee Shop",
     amount: 4.75,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Food",
@@ -61,7 +61,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_6",
     date: new Date(2023, 5, 20),
-    description: "Online Course",
+    title: "Online Course",
     amount: 89.99,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Education",
@@ -71,7 +71,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_7",
     date: new Date(2023, 5, 21),
-    description: "Rent Payment",
+    title: "Rent Payment",
     amount: 950,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Housing",
@@ -81,7 +81,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_8",
     date: new Date(2023, 5, 22),
-    description: "Stock Dividends",
+    title: "Stock Dividends",
     amount: 42.5,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Investments",
@@ -91,7 +91,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_9",
     date: new Date(2023, 5, 23),
-    description: "Gym Membership",
+    title: "Gym Membership",
     amount: 35,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Health",
@@ -100,7 +100,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_10",
     date: new Date(2023, 5, 24),
-    description: "Book Sale",
+    title: "Book Sale",
     amount: 28.4,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Sales",
@@ -109,7 +109,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_11",
     date: new Date(2023, 5, 25),
-    description: "Netflix Subscription",
+    title: "Netflix Subscription",
     amount: 15.99,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Entertainment",
@@ -119,7 +119,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_12",
     date: new Date(2023, 5, 26),
-    description: "Salary Deposit",
+    title: "Salary Deposit",
     amount: 3000,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Salary",
@@ -129,7 +129,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
   {
     id: "txn_13",
     date: new Date(2023, 5, 27),
-    description: "Gym Membership",
+    title: "Gym Membership",
     amount: 35,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Health",

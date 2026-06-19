@@ -31,7 +31,7 @@ import { formatCurrency } from "@/lib/format-currency";
 export type TransactionType = {
   id: string;
   date: Date;
-  description: string;
+  title: string;
   amount: number;
   type: TransactionOptionsType;
   category: string;
@@ -76,8 +76,8 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     cell: ({ row }) => format(row.getValue("date"), "MMM dd, yyyy"),
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "title",
+    header: "Title",
   },
   {
     accessorKey: "category",
