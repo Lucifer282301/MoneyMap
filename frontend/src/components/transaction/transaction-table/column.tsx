@@ -143,7 +143,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
   },
   {
     accessorKey: "frequency",
-    header: "Schedule",
+    header: "Frequently",
     cell: ({ row }) => {
       const frequency = row.getValue("frequency");
       const nextDate = row.original?.nextOccurrence;

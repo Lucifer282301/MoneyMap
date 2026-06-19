@@ -1,11 +1,18 @@
-import { ImportIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import PageLayout from "@/components/page-layout";
-import { Button } from "@/components/ui/button";
 import AddTransactionDrawer from "@/components/transaction/add-transaction-drawer";
 import TransactionTable from "@/components/transaction/transaction-table";
+import { Button } from "@/components/ui/button";
+import { ImportIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const Transactions = () => {
+  const handleBulkImport = () => {
+    toast.info(
+      "Bulk import is available for Premium users only. Upgrade to unlock this feature",
+    );
+  };
+
   return (
     <PageLayout
       title="All Transactions"
@@ -16,6 +23,7 @@ const Transactions = () => {
           <Button
             variant="outline"
             className="!shadow-none !cursor-pointer !border-gray-500 !text-white !bg-transparent"
+            onClick={handleBulkImport}
           >
             <ImportIcon className="!w-5 !h-5" />
             Bulk Import

@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
+import * as z from "zod";
+import { useState } from "react";
 import { Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -30,14 +31,22 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import ReceiptScanner from "./receipt-scanner";
-import { CATEGORIES, PAYMENT_METHODS } from "@/constants";
+
+import {
+  TRANSACTION_FREQUENCY,
+  TRANSACTION_OPTIONS,
+  CATEGORIES,
+  PAYMENT_METHODS,
+} from "@/constants";
+import { Switch } from "../ui/switch";
+import CurrencyInputField from "../ui/currency-input";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters." }),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: "Amount must be a positive number.",
   }),
-  type: z.enum(["income", "expense"]),
+  type: z.enum([TRANSACTION_OPTIONS.INCOME, TRANSACTION_OPTIONS.EXPENSE]),
   category: z.string().min(1, { message: "Please select a category." }),
   date: z.date({
     required_error: "Please select a date.",
@@ -45,24 +54,63 @@ const formSchema = z.object({
   paymentMethod: z
     .string()
     .min(1, { message: "Please select a payment method." }),
+  isRecurring: z.boolean(),
+  frequency: z
+    .enum([
+      TRANSACTION_FREQUENCY.ONE_TIME,
+      TRANSACTION_FREQUENCY.DAILY,
+      TRANSACTION_FREQUENCY.WEEKLY,
+      TRANSACTION_FREQUENCY.MONTHLY,
+      TRANSACTION_FREQUENCY.YEARLY,
+    ])
+    .optional(),
   description: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const TransactionForm = () => {
+  const [isScanning, setIsScanning] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       amount: "",
-      type: "expense",
+      type: TRANSACTION_OPTIONS.INCOME,
       category: "",
       date: new Date(),
       paymentMethod: "",
+      isRecurring: false,
+      frequency: TRANSACTION_FREQUENCY.ONE_TIME,
       description: "",
     },
   });
+
+  const frequencyOptions = Object.entries(TRANSACTION_FREQUENCY).map(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ([_, value]) => ({
+      value: value,
+      label: value.replace("_", " ").toLowerCase(),
+    }),
+  );
+
+  const handleScanComplete = (data: {
+    amount?: number;
+    date?: Date;
+    merchant?: string;
+  }) => {
+    if (data.amount) {
+      form.setValue("amount", data.amount.toString());
+    }
+    if (data.date) {
+      form.setValue("date", data.date);
+    }
+    if (data.merchant) {
+      form.setValue("title", data.merchant);
+    }
+  };
+
   // Handle form submission
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted:", data);
@@ -73,11 +121,14 @@ const TransactionForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-4">
           <div className="space-y-6">
-            {/* Receipt Upload Section */}
-            <ReceiptScanner />
+             {/* Receipt Upload Section */}
+            <ReceiptScanner
+              onScanComplete={handleScanComplete}
+              onLoadingChange={setIsScanning}
+            />
 
             {/* Transaction Type */}
-            <FormField
+             <FormField
               control={form.control}
               name="type"
               render={({ field }) => (
@@ -87,38 +138,39 @@ const TransactionForm = () => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex space-x-2"
+                    disabled={isScanning}
                   >
                     <label
-                      htmlFor="income"
+                      htmlFor={TRANSACTION_OPTIONS.INCOME}
                       className={cn(
                         `text-sm font-normal leading-none cursor-pointer
                         flex items-center space-x-2 rounded-md 
                         shadow-sm border p-2 flex-1 justify-center 
                         `,
-                        field.value === "income" && "!border-primary",
+                        field.value === TRANSACTION_OPTIONS.INCOME && "!border-primary"
                       )}
                     >
                       <RadioGroupItem
-                        value="income"
-                        id="income"
+                        value={TRANSACTION_OPTIONS.INCOME}
+                        id={TRANSACTION_OPTIONS.INCOME}
                         className="!border-primary"
                       />
                       Income
                     </label>
 
                     <label
-                      htmlFor="expense"
+                      htmlFor={TRANSACTION_OPTIONS.EXPENSE}
                       className={cn(
                         `text-sm font-normal leading-none cursor-pointer
                         flex items-center space-x-2 rounded-md 
                         shadow-sm border p-2 flex-1 justify-center 
                         `,
-                        field.value === "expense" && "!border-primary",
+                        field.value === TRANSACTION_OPTIONS.EXPENSE && "!border-primary"
                       )}
                     >
                       <RadioGroupItem
-                        value="expense"
-                        id="expense"
+                        value={TRANSACTION_OPTIONS.EXPENSE}
+                        id={TRANSACTION_OPTIONS.EXPENSE}
                         className="!border-primary"
                       />
                       Expense
@@ -137,7 +189,11 @@ const TransactionForm = () => {
                 <FormItem>
                   <FormLabel className="!font-normal">Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Transaction title" {...field} />
+                    <Input
+                      placeholder="Transaction title"
+                      {...field}
+                      disabled={isScanning}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -153,15 +209,13 @@ const TransactionForm = () => {
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2">
-                        $
-                      </span>
-                      <Input
-                        placeholder="0.00"
+                      <CurrencyInputField
                         {...field}
-                        className="pl-8"
-                        type="text"
-                        inputMode="decimal"
+                        disabled={isScanning}
+                        onValueChange={(value) => field.onChange(value || '')}
+                        placeholder="0.00"
+                        prefix="$"
+
                       />
                     </div>
                   </FormControl>
@@ -180,6 +234,7 @@ const TransactionForm = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isScanning}
                   >
                     <FormControl className="w-full">
                       <SelectTrigger>
@@ -213,7 +268,7 @@ const TransactionForm = () => {
                           variant={"outline"}
                           className={cn(
                             "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
+                            !field.value && "text-muted-foreground"
                           )}
                         >
                           {field.value ? (
@@ -249,6 +304,7 @@ const TransactionForm = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isScanning}
                   >
                     <FormControl className="w-full">
                       <SelectTrigger>
@@ -268,6 +324,79 @@ const TransactionForm = () => {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="isRecurring"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-[14.5px]">
+                      Recurring Transaction
+                    </FormLabel>
+                    <p className="text-xs text-muted-foreground">
+                      {field.value
+                        ? "This will repeat automatically"
+                        : "Set recurring to repeat this transaction"}
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      disabled={isScanning}
+                      checked={field.value}
+                      className="cursor-pointer"
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        if (!checked) {
+                          form.setValue(
+                            "frequency",
+                            TRANSACTION_FREQUENCY.ONE_TIME
+                          );
+                        }
+                      }}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+           {form.watch("isRecurring") && form.getValues().isRecurring && (
+              <FormField
+                control={form.control}
+                name="frequency"
+                render={({ field }) => (
+                  <FormItem className="recurring-control">
+                    <FormLabel>Frequency</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={isScanning}
+                    >
+                      <FormControl className="w-full">
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder="Select frequency"
+                            className="!capitalize"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {frequencyOptions.map(({ value, label }) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                            className="!capitalize"
+                          >
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )} 
+
             {/* Description */}
             <FormField
               control={form.control}
@@ -279,6 +408,7 @@ const TransactionForm = () => {
                     <Textarea
                       placeholder="Add notes about this transaction"
                       className="resize-none"
+                      disabled={isScanning}
                       {...field}
                     />
                   </FormControl>
@@ -289,7 +419,7 @@ const TransactionForm = () => {
           </div>
 
           <div className="sticky bottom-0 bg-white pb-2">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isScanning}>
               Save
             </Button>
           </div>
