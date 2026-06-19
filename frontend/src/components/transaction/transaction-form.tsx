@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +40,7 @@ import {
 } from "@/constants";
 import { Switch } from "../ui/switch";
 import CurrencyInputField from "../ui/currency-input";
+import { SingleSelector } from "../ui/single-select";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters." }),
@@ -57,19 +58,23 @@ const formSchema = z.object({
   isRecurring: z.boolean(),
   frequency: z
     .enum([
-      TRANSACTION_FREQUENCY.ONE_TIME,
       TRANSACTION_FREQUENCY.DAILY,
       TRANSACTION_FREQUENCY.WEEKLY,
       TRANSACTION_FREQUENCY.MONTHLY,
       TRANSACTION_FREQUENCY.YEARLY,
     ])
+    .nullable()
     .optional(),
   description: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const TransactionForm = () => {
+const TransactionForm = (props: {
+  isEdit?: boolean;
+  transactionId?: string;
+}) => {
+  const { isEdit = false, transactionId } = props;
   const [isScanning, setIsScanning] = useState(false);
 
   const form = useForm<FormValues>({
@@ -82,10 +87,26 @@ const TransactionForm = () => {
       date: new Date(),
       paymentMethod: "",
       isRecurring: false,
-      frequency: TRANSACTION_FREQUENCY.ONE_TIME,
+      frequency: null,
       description: "",
     },
   });
+
+  useEffect(() => {
+    if (isEdit && transactionId) {
+      form.reset({
+        title: "",
+        amount: "",
+        type: TRANSACTION_OPTIONS.INCOME,
+        category: "",
+        date: new Date(),
+        paymentMethod: "",
+        isRecurring: false,
+        frequency: null,
+        description: "",
+      });
+    }
+  }, [form, isEdit, transactionId]);
 
   const frequencyOptions = Object.entries(TRANSACTION_FREQUENCY).map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -122,10 +143,12 @@ const TransactionForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-4">
           <div className="space-y-6">
             {/* Receipt Upload Section */}
-            <ReceiptScanner
-              onScanComplete={handleScanComplete}
-              onLoadingChange={setIsScanning}
-            />
+            {!isEdit && (
+              <ReceiptScanner
+                onScanComplete={handleScanComplete}
+                onLoadingChange={setIsScanning}
+              />
+            )}
 
             {/* Transaction Type */}
             <FormField
@@ -232,24 +255,14 @@ const TransactionForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                  <SingleSelector
+                    value={CATEGORIES.find((opt) => opt.value === field.value)}
+                    onChange={(option) => field.onChange(option.value)}
+                    options={CATEGORIES}
+                    placeholder="Select or type a category"
+                    creatable
                     disabled={isScanning}
-                  >
-                    <FormControl className="w-full">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {CATEGORIES.map((category) => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -285,7 +298,13 @@ const TransactionForm = () => {
                       <CalendarComponent
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                          console.log(date);
+                          field.onChange(date); // This updates the form value
+                        }}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
                         initialFocus
                       />
                     </PopoverContent>
@@ -350,7 +369,7 @@ const TransactionForm = () => {
                         if (!checked) {
                           form.setValue(
                             "frequency",
-                            TRANSACTION_FREQUENCY.ONE_TIME,
+                            TRANSACTION_FREQUENCY.DAILY,
                           );
                         }
                       }}
@@ -369,7 +388,7 @@ const TransactionForm = () => {
                     <FormLabel>Frequency</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={field.value ?? undefined}
                       disabled={isScanning}
                     >
                       <FormControl className="w-full">
@@ -421,7 +440,7 @@ const TransactionForm = () => {
 
           <div className="sticky bottom-0 bg-white dark:bg-background pb-2">
             <Button type="submit" className="w-full" disabled={isScanning}>
-              Save
+              {isEdit ? "Update" : "Save"}
             </Button>
           </div>
         </form>
