@@ -1,4 +1,3 @@
-import * as React from "react";
 import { format } from "date-fns";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -161,7 +160,7 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                minTickGap={32}
+                minTickGap={isMobile ? 20 : 25}
                 tickFormatter={(value) =>
                   format(new Date(value), isMobile ? "MMM d" : "MMMM d, yyyy")
                 }
@@ -197,7 +196,7 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
               />
               <Area
                 dataKey="expenses"
-                stackId="b"
+                stackId="1"
                 type="step"
                 fill="url(#expensesGradient)"
                 stroke={COLORS[1]}
@@ -205,13 +204,14 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
               />
               <Area
                 dataKey="income"
-                stackId="b"
+                stackId="1"
                 type="step"
                 fill="url(#incomeGradient)"
                 stroke={COLORS[0]}
               />
               <ChartLegend
-                content={<ChartLegendContent verticalAlign="top" />}
+                verticalAlign="bottom"
+                content={<ChartLegendContent />}
               />
             </AreaChart>
           </ChartContainer>

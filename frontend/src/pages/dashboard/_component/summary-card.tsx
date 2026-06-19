@@ -23,10 +23,15 @@ interface SummaryCardProps {
   percentageChange?: number;
   isPercentageValue?: boolean;
   isLoading?: boolean;
+  expenseRatio?: number;
   cardType: CardType;
 }
 
-const getCardStatus = (value: number, cardType: CardType): CardStatus => {
+const getCardStatus = (
+  value: number,
+  cardType: CardType,
+  expenseRatio?: number,
+): CardStatus => {
   if (cardType === "savings") {
     if (value === 0) {
       return {
@@ -36,34 +41,48 @@ const getCardStatus = (value: number, cardType: CardType): CardStatus => {
       };
     }
 
-    if (value < 10) {
+    // Show spending warnings first if expenses are high
+    if (expenseRatio && expenseRatio > 75) {
       return {
-        label: "Critical",
+        label: "High Spend",
         color: "text-red-400",
         Icon: TrendingDownIcon,
-        description: "Aim for at least 10%",
+        description: `${expenseRatio.toFixed(0)}% spent`,
+      };
+    }
+
+    if (expenseRatio && expenseRatio > 60) {
+      return {
+        label: "High Spend",
+        color: "text-orange-400",
+        Icon: TrendingDownIcon,
+        description: `${expenseRatio.toFixed(0)}% spent`,
+      };
+    }
+
+    // Then check savings rate
+    if (value < 10) {
+      return {
+        label: "Low Savings",
+        color: "text-red-400",
+        Icon: TrendingDownIcon,
+        description: `Only ${value.toFixed(1)}% saved`,
       };
     }
 
     if (value < 20) {
       return {
-        label: "Low",
+        label: "Moderate",
         color: "text-yellow-400",
         Icon: TrendingDownIcon,
+        description: `${expenseRatio?.toFixed(0)}% spent`,
       };
     }
 
-    if (value < 30) {
-      return {
-        label: "Great",
-        color: "text-green-400",
-        Icon: TrendingUpIcon,
-      };
-    }
-
+    // Good savings rate
     return {
-      label: "Excellent",
-      color: "text-teal-400",
+      label: "Good Savings",
+      color: "text-green-400",
       Icon: TrendingUpIcon,
     };
   }
@@ -84,6 +103,7 @@ const getCardStatus = (value: number, cardType: CardType): CardStatus => {
     };
   }
 
+  // For balance card when negative
   if (cardType === "balance" && value < 0) {
     return {
       label: "Overdrawn",
@@ -102,8 +122,10 @@ const getCardStatus = (value: number, cardType: CardType): CardStatus => {
 
 const getTrendDirection = (value: number, cardType: CardType) => {
   if (cardType === "expenses") {
+    // For expenses, lower is better
     return value <= 0 ? "positive" : "negative";
   }
+  // For income and balance, higher is better
   return value >= 0 ? "positive" : "negative";
 };
 
@@ -114,9 +136,10 @@ const SummaryCard = ({
   percentageChange,
   isPercentageValue,
   isLoading,
-  cardType,
+  expenseRatio,
+  cardType = "balance",
 }: SummaryCardProps) => {
-  const status = getCardStatus(value, cardType);
+  const status = getCardStatus(value, cardType, expenseRatio);
 
   const showTrend =
     percentageChange !== undefined &&
@@ -177,7 +200,7 @@ const SummaryCard = ({
           />
         </div>
 
-        <div className="mt-2 text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground mt-2">
           {cardType === "savings" ? (
             <div className="flex items-center gap-1.5">
               <status.Icon className={cn("size-3.5", status.color)} />
@@ -187,7 +210,7 @@ const SummaryCard = ({
               </span>
 
               {status.description && (
-                <span className="ml-1 text-gray-400">
+                <span className="text-gray-400 ml-1">
                   • {status.description}
                 </span>
               )}
@@ -200,15 +223,16 @@ const SummaryCard = ({
 
               <span className={status.color}>{status.label}</span>
 
-              {status.description ? (
+              {status.description && (
                 <span className="text-gray-400">• {status.description}</span>
-              ) : (
+              )}
+              {!status.description && (
                 <span className="text-gray-400">• {dateRange?.label}</span>
               )}
             </div>
           ) : showTrend ? (
             <div className="flex items-center gap-1.5">
-              {percentageChange !== 0 ? (
+              {percentageChange !== 0 && (
                 <div
                   className={cn(
                     "flex items-center gap-0.5",
@@ -231,7 +255,9 @@ const SummaryCard = ({
                     })}
                   </span>
                 </div>
-              ) : (
+              )}
+
+              {percentageChange === 0 && (
                 <div className="flex items-center gap-0.5 text-gray-400">
                   <TrendingDownIcon className="size-3" />
 
