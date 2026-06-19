@@ -16,6 +16,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     category: "Freelance",
     status: TRANSACTION_STATUS.COMPLETED,
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 15), 1),
   },
   {
@@ -26,6 +27,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Food",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 16), 1),
   },
   {
@@ -36,6 +38,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Utilities",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 17), 1),
   },
   {
@@ -46,6 +49,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Services",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 18), 1),
   },
   {
@@ -56,6 +60,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Food",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 19), 1),
   },
   {
@@ -66,6 +71,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Education",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 20), 1),
   },
   {
@@ -76,6 +82,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Housing",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 21), 1),
   },
   {
@@ -86,6 +93,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Investments",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 22), 1),
   },
   {
@@ -95,7 +103,8 @@ export const TRANSACTION_DATA: TransactionType[] = [
     amount: 35,
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Health",
-    frequency: TRANSACTION_FREQUENCY.ONE_TIME,
+    frequency: null,
+    isRecurring: false,
   },
   {
     id: "txn_10",
@@ -104,7 +113,8 @@ export const TRANSACTION_DATA: TransactionType[] = [
     amount: 28.4,
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Sales",
-    frequency: TRANSACTION_FREQUENCY.ONE_TIME,
+    frequency: null,
+    isRecurring: false,
   },
   {
     id: "txn_11",
@@ -114,6 +124,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Entertainment",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 25), 1),
   },
   {
@@ -124,6 +135,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.INCOME,
     category: "Salary",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 26), 1),
   },
   {
@@ -134,6 +146,7 @@ export const TRANSACTION_DATA: TransactionType[] = [
     type: TRANSACTION_OPTIONS.EXPENSE,
     category: "Health",
     frequency: TRANSACTION_FREQUENCY.MONTHLY,
+    isRecurring: true,
     nextOccurrence: addMonths(new Date(2023, 5, 27), 1),
   },
 ];
