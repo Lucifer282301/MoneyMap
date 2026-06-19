@@ -49,13 +49,16 @@ interface DateRangeSelectProps {
   defaultRange?: DateRangeEnumType;
 }
 
+const today = new Date();
+const yesterday = subDays(today, 1);
+
 const presets: DateRangePreset[] = [
   {
     label: "Last 30 Days",
     value: DateRangeEnum.LAST_30_DAYS,
     getRange: () => ({
-      from: subDays(new Date(), 30),
-      to: new Date(),
+      from: subDays(yesterday, 29),
+      to: yesterday,
       value: DateRangeEnum.LAST_30_DAYS,
       label: "for Past 30 Days",
     }),
@@ -64,8 +67,8 @@ const presets: DateRangePreset[] = [
     label: "Last Month",
     value: DateRangeEnum.LAST_MONTH,
     getRange: () => ({
-      from: startOfMonth(subMonths(new Date(), 1)),
-      to: startOfMonth(new Date()),
+      from: startOfMonth(subMonths(today, 1)),
+      to: startOfMonth(today),
       value: DateRangeEnum.LAST_MONTH,
       label: "for Last Month",
     }),
@@ -74,8 +77,8 @@ const presets: DateRangePreset[] = [
     label: "Last 3 Months",
     value: DateRangeEnum.LAST_3_MONTHS,
     getRange: () => ({
-      from: startOfMonth(subMonths(new Date(), 3)),
-      to: startOfMonth(new Date()),
+      from: startOfMonth(subMonths(today, 3)),
+      to: startOfMonth(today),
       value: DateRangeEnum.LAST_3_MONTHS,
       label: "for Past 3 Months",
     }),
@@ -84,8 +87,8 @@ const presets: DateRangePreset[] = [
     label: "Last Year",
     value: DateRangeEnum.LAST_YEAR,
     getRange: () => ({
-      from: startOfYear(subYears(new Date(), 1)),
-      to: startOfYear(new Date()),
+      from: startOfYear(subYears(today, 1)),
+      to: startOfYear(today),
       value: DateRangeEnum.LAST_YEAR,
       label: "for Past Year",
     }),
@@ -94,8 +97,8 @@ const presets: DateRangePreset[] = [
     label: "This Month",
     value: DateRangeEnum.THIS_MONTH,
     getRange: () => ({
-      from: startOfMonth(new Date()),
-      to: new Date(),
+      from: startOfMonth(today),
+      to: today,
       value: DateRangeEnum.THIS_MONTH,
       label: "for This Month",
     }),
@@ -104,8 +107,8 @@ const presets: DateRangePreset[] = [
     label: "This Year",
     value: DateRangeEnum.THIS_YEAR,
     getRange: () => ({
-      from: startOfYear(new Date()),
-      to: new Date(),
+      from: startOfYear(today),
+      to: today,
       value: DateRangeEnum.THIS_YEAR,
       label: "for This Year",
     }),
@@ -143,7 +146,6 @@ export const DateRangeSelect = ({
     if (!dateRange) {
       const defaultPreset = presets.find((p) => p.value === defaultRange);
       if (defaultPreset) {
-        console.log(defaultPreset.getRange(), "defaultPreset.getRange()");
         setDateRange(defaultPreset.getRange());
       }
     }

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ScanText } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { AIScanReceiptData } from "@/features/transaction/transactionType";
 import { toast } from "sonner";
+import { useProgressLoader } from "@/hooks/use-progress-loader";
 
 interface ReceiptScannerProps {
   loadingChange: boolean;
@@ -18,11 +19,18 @@ const ReceiptScanner = ({
   onLoadingChange,
 }: ReceiptScannerProps) => {
   const [receipt, setReceipt] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
 
-  const handleReceiptUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const {
+    progress,
+    startProgress,
+    updateProgress,
+    doneProgress,
+    resetProgress,
+  } = useProgressLoader({ initialProgress: 10, completionDelay: 500 });
+
+  // const [aiScanReceipt] = useAiScanReceiptMutation()
+
+  const handleReceiptUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       toast.error("Please select a file");
@@ -35,22 +43,27 @@ const ReceiptScanner = ({
     const formData = new FormData();
     formData.append("receipt", file);
 
-    setProgress(0);
+    startProgress(10);
     onLoadingChange(true);
 
+    // Simulate file upload and processing
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
       setReceipt(result);
 
+      // Simulate scanning progress
+      // Start progress
+      let currentProgress = 10;
       const interval = setInterval(() => {
-        setProgress((prev) => {
-          const increment = prev < 80 ? 10 : 1;
-          return Math.min(prev + increment, 90);
-        });
-      }, 300);
+        const increment = currentProgress < 90 ? 10 : 1;
+        currentProgress = Math.min(currentProgress + increment, 90);
+        updateProgress(currentProgress);
+      }, 250);
 
       setTimeout(() => {
+        clearInterval(interval);
+
         onScanComplete({
           title: "Netflix Subscription",
           amount: 15.99,
@@ -61,11 +74,25 @@ const ReceiptScanner = ({
           receiptUrl: result,
           type: "EXPENSE",
         });
-        clearInterval(interval);
-        setProgress(100);
+        doneProgress();
+        resetProgress();
         setReceipt(null);
         onLoadingChange(false);
       }, 2000);
+
+      // aiScanReceipt(formData).unwrap().then((res) => {
+      //   updateProgress(100)
+      //   onScanComplete(res.data);
+      //   toast.success("Receipt scanned successfully");
+      // }).catch((error) => {
+      //   toast.error(error.data?.message || "Failed to scan receipt");
+      // })
+      // .finally(() => {
+      //   clearInterval(interval);
+      //   resetProgress();
+      //   setReceipt(null);
+      //   onLoadingChange(false);
+      // })
     };
     reader.readAsDataURL(file);
   };

@@ -60,6 +60,12 @@ const chartConfig = {
 
 const ExpensePieChart = (props: { dateRange?: DateRangeType }) => {
   const { dateRange } = props;
+  // const { data, isFetching } = useExpensePieChartBreakdownQuery({
+  //   preset: dateRange?.value,
+  // });
+  // const categories = data?.data?.breakdown || [];
+  // const totalSpent = data?.data?.totalSpent || 0;
+
   const isFetching = false;
 
   const totalSpent = useMemo(() => {

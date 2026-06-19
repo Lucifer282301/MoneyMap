@@ -70,7 +70,7 @@ const Navbar = () => {
                     `w-full lg:w-auto font-normal py-4.5
                      hover:text-white border-none
                      text-white/60 focus:bg-white/30
-                     transition !bg-transparent
+                     transition !bg-transparent !text-[14.5px]
                      `,
                     pathname === route.href && "text-white",
                   )}

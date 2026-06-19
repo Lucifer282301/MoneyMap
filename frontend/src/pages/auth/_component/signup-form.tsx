@@ -26,6 +26,7 @@ type FormValues = z.infer<typeof schema>;
 
 const SignUpForm = () => {
   const navigate = useNavigate();
+  // const [register,{isLoading}] = useRegisterMutation();
   const isLoading = false;
 
   const form = useForm<FormValues>({
@@ -36,6 +37,18 @@ const SignUpForm = () => {
     console.log(values);
     toast.success("Sign up successful");
     navigate(AUTH_ROUTES.SIGN_IN);
+
+    // register(values)
+    // .unwrap()
+    // .then(() => {
+    //   form.reset();
+    //   toast.success("Sign up successful");
+    //   navigate(AUTH_ROUTES.SIGN_IN);
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    //   toast.error(error.data?.message || "Failed to sign up");
+    // });
   };
 
   return (

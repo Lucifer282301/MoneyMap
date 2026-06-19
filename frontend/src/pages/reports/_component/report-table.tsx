@@ -9,6 +9,15 @@ const ReportTable = () => {
     pageSize: 10,
   });
 
+  // const { data, isFetching } = useGetAllReportsQuery(filter)
+
+  // const pagination = {
+  //   totalItems: data?.pagination?.totalCount || 0,
+  //   totalPages: data?.pagination?.totalPages || 0,
+  //   pageNumber: filter.pageNumber,
+  //   pageSize: filter.pageSize,
+  // }
+
   const pagination = {
     totalItems: 0,
     totalPages: 0,
@@ -25,7 +34,7 @@ const ReportTable = () => {
   };
   return (
     <DataTable
-      data={REPORT_DATA}
+      data={REPORT_DATA} //data?.reports || []
       columns={reportColumns}
       isLoading={false}
       showSearch={false}
