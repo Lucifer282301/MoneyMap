@@ -49,8 +49,14 @@ const categories: Category[] = [
 ];
 
 const ExpenseBreakDown = () => {
-  const totalSpent = categories.reduce((sum, c) => sum + c.amount, 0);
-  const totalLimit = categories.reduce((sum, c) => sum + c.limit, 0);
+  const totalSpent = categories.reduce(
+    (sum, category) => sum + category.amount,
+    0,
+  );
+  const totalLimit = categories.reduce(
+    (sum, category) => sum + category.limit,
+    0,
+  );
   const overallPercentage = Math.min((totalSpent / totalLimit) * 100, 100);
 
   return (
@@ -61,7 +67,6 @@ const ExpenseBreakDown = () => {
           <span>${totalSpent.toLocaleString()} spent</span>
           <span>{Math.round(overallPercentage)}% of budget</span>
         </div>
-
         <div className="w-full h-1.5 bg-gray-100 rounded-full mt-2">
           <div
             className="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
@@ -88,7 +93,19 @@ const ExpenseBreakDown = () => {
   );
 };
 
-const CategoryItem = ({ name, amount, limit, color, icon }: Category) => {
+const CategoryItem = ({
+  name,
+  amount,
+  limit,
+  color,
+  icon,
+}: {
+  name: string;
+  amount: number;
+  limit: number;
+  color: string;
+  icon: ReactNode;
+}) => {
   const percentage = Math.min((amount / limit) * 100, 100);
   const isNearLimit = percentage >= 80;
   const statusColor =
@@ -120,7 +137,7 @@ const CategoryItem = ({ name, amount, limit, color, icon }: Category) => {
           {Math.round(percentage)}%
         </div>
       </div>
-      
+
       <div className="w-full h-1.5 bg-gray-100 rounded-full">
         <div
           className={`h-1.5 rounded-full ${color} ${isNearLimit ? "animate-pulse" : ""}`}

@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/context/theme-provider";
 
 export const AppearanceForm = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, setTheme } = useTheme();
 
   const handleThemeChange = (value: "light" | "dark") => {
     setTheme(value);
-    // You can add logic here to actually change the theme in your application
   };
 
   return (
@@ -18,11 +17,10 @@ export const AppearanceForm = () => {
         <p className="text-sm text-muted-foreground">
           Select the theme for the dashboard.
         </p>
-
         <RadioGroup
           value={theme}
           onValueChange={handleThemeChange}
-          className="grid max-w-md grid-cols-2 gap-8 pt-2"
+          className="flex flex-col md:flex-row items-start md:items-center gap-5 max-w-md pt-2"
         >
           <div>
             <Label className="flex flex-col [&:has([data-state=checked])>div]:border-primary">
@@ -33,12 +31,10 @@ export const AppearanceForm = () => {
                     <div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                   </div>
-
                   <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
                     <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                   </div>
-
                   <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
                     <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
                     <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
@@ -59,12 +55,10 @@ export const AppearanceForm = () => {
                     <div className="h-2 w-[80px] rounded-lg bg-slate-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
                   </div>
-
                   <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
                     <div className="h-4 w-4 rounded-full bg-slate-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
                   </div>
-
                   <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
                     <div className="h-4 w-4 rounded-full bg-slate-400" />
                     <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
@@ -78,7 +72,7 @@ export const AppearanceForm = () => {
         </RadioGroup>
       </div>
 
-      <Button className="mt-4">Update preferences</Button>
+      <Button className="mt-4 text-white">Update preferences</Button>
     </div>
   );
 };

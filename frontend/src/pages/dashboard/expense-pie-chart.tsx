@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { Label, Pie, PieChart, Cell } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -15,7 +14,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-//import { formatCurrency } from "@/lib/format-currency"
+import { DateRangeType } from "@/components/date-range-select";
+import { formatCurrency } from "@/lib/format-currency";
 
 interface Category {
   name: string;
@@ -53,27 +53,12 @@ const chartConfig = {
   amount: {
     label: "Amount",
   },
-  "Food & Dining": {
-    label: "Food & Dining",
-    color: COLORS[0],
-  },
-  Utilities: {
-    label: "Utilities",
-    color: COLORS[1],
-  },
-  Shopping: {
-    label: "Shopping",
-    color: COLORS[2],
-  },
-  Others: {
-    label: "Others",
-    color: COLORS[3],
-  },
 } satisfies ChartConfig;
 
-const ExpensePieChart = () => {
+const ExpensePieChart = (props: { dateRange?: DateRangeType }) => {
+  const { dateRange } = props;
   const totalSpent = useMemo(() => {
-    return categories.reduce((sum, c) => sum + c.amount, 0);
+    return categories.reduce((sum, category) => sum + category.amount, 0);
   }, []);
 
   // Format data for pie chart
@@ -116,7 +101,7 @@ const ExpensePieChart = () => {
             <div className="flex justify-between w-full">
               <span className="text-xs font-medium truncate">{entry.name}</span>
               <span className="text-xs text-muted-foreground">
-                {entry.percentage}%
+                {formatCurrency(entry.value)}
               </span>
             </div>
           </div>
@@ -126,10 +111,10 @@ const ExpensePieChart = () => {
   };
 
   return (
-    <Card className="!shadow-none border-1 border-gray-100">
+    <Card className="!shadow-none border-1 border-gray-100 dark:border-border">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg">Expenses Breakdown</CardTitle>
-        <CardDescription>Current Month</CardDescription>
+        <CardDescription>Total expenses {dateRange?.label}</CardDescription>
       </CardHeader>
       <CardContent className="h-[313px]">
         <div className=" w-full">

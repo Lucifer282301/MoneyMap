@@ -1,10 +1,11 @@
 import AppRoutes from "./routes";
+import { ThemeProvider } from "./context/theme-provider";
 
 const App = () => {
   return (
-    <div>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <AppRoutes />
-    </div>
+    </ThemeProvider>
   );
 };
 
