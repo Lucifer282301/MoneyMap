@@ -12,7 +12,7 @@ import {
   VisibilityState,
   ColumnFiltersState,
 } from "@tanstack/react-table";
-import { PlusCircleIcon, Trash, X } from "lucide-react";
+import { Loader, PlusCircleIcon, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import TableSkeleton from "./table-skeleton-loader";
+import { DataTablePagination } from "./table-pagination";
+import { EmptyState } from "../empty-state";
 
 interface FilterOption {
   key: string;
@@ -42,26 +45,43 @@ interface DataTableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
   searchPlaceholder?: string;
+  showSearch?: boolean;
   filters?: FilterOption[];
   className?: string;
   onSearch?: (term: string) => void;
   onFilterChange?: (filters: Record<string, string>) => void;
   onBulkDelete?: (selectedIds: string[]) => void;
-  pagination?: boolean;
   selection?: boolean;
+  isLoading?: boolean;
+  isBulkDeleting?: boolean;
+  isShowPagination?: boolean;
+  pagination?: {
+    totalItems?: number;
+    totalPages?: number;
+    pageNumber?: number;
+    pageSize?: number;
+  };
+  onPageChange?: (pageNumber: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
 }
 
 export const DataTable = <TData,>({
   data,
   columns,
   searchPlaceholder = "Search...",
+  showSearch = true,
   filters = [],
   className,
   onSearch,
   onFilterChange,
   onBulkDelete,
-  pagination = true,
   selection = true,
+  isLoading = false,
+  isBulkDeleting = false,
+  isShowPagination = true,
+  pagination,
+  onPageChange,
+  onPageSizeChange,
 }: DataTableProps<TData>) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
@@ -122,10 +142,11 @@ export const DataTable = <TData,>({
       {/* Top Bar: Search & Filters */}
       <div className="flex flex-wrap justify-between items-center gap-2 pb-4">
         <div className="flex items-center gap-2 flex-wrap flex-1">
-          {searchPlaceholder && (
+          {showSearch && (
             <Input
               placeholder={searchPlaceholder}
               value={searchTerm}
+              disabled={isLoading}
               onChange={(e) => handleSearch(e.target.value)}
               className="max-w-sm"
             />
@@ -135,6 +156,7 @@ export const DataTable = <TData,>({
             <Select
               key={key}
               value={filterValues[key] ?? ""}
+              disabled={isLoading}
               onValueChange={(value) => handleFilterChange(key, value)}
             >
               <SelectTrigger className="min-w-[160px]">
@@ -157,99 +179,102 @@ export const DataTable = <TData,>({
           {(searchTerm ||
             Object.keys(rowSelection).length > 0 ||
             Object.keys(filterValues).length > 0) && (
-            <Button variant="ghost" onClick={handleClear} className="h-8 px-2">
+            <Button
+              variant="ghost"
+              disabled={isLoading || isBulkDeleting}
+              onClick={handleClear}
+              className="h-8 px-2"
+            >
               <X className="h-4 w-4 mr-1" />
               Reset
             </Button>
           )}
         </div>
 
-        {selection && hasSelections && (
-          <Button variant="destructive" size="sm" onClick={handleDelete}>
+        {(selection && hasSelections) || isBulkDeleting ? (
+          <Button
+            disabled={isLoading || isBulkDeleting}
+            variant="destructive"
+            size="sm"
+            onClick={handleDelete}
+          >
             <Trash className="h-4 w-4 mr-1" />
             Delete ({selectedRows.length})
+            {isBulkDeleting && <Loader className="ml-1 h-4 w-4 animate-spin" />}
           </Button>
-        )}
+        ) : null}
       </div>
 
       {/* Table */}
       <div className={cn("rounded-md border overflow-x-auto", className)}>
-        <Table>
-          <TableHeader className="sticky top-0 bg-muted z-10">
-            {table.getHeaderGroups().map((group) => (
-              <TableRow key={group.id}>
-                {group.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="!font-medium !text-[13px]"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="!text-[13.3px]">
+        {isLoading ? (
+          <TableSkeleton columns={6} rows={20} />
+        ) : (
+          <Table
+            className={cn(
+              table.getRowModel().rows.length === 0 ? "h-[200px]" : "",
+            )}
+          >
+            <TableHeader className="sticky top-0 bg-muted z-10 ">
+              {table.getHeaderGroups().map((group) => (
+                <TableRow key={group.id}>
+                  {group.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="!font-medium !text-[13px]"
+                    >
                       {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                        header.column.columnDef.header,
+                        header.getContext(),
                       )}
-                    </TableCell>
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="text-center h-24"
-                >
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="!text-[13.3px]">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="text-center h-24"
+                  >
+                    <EmptyState title="No records found" description="" />
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {/* Pagination */}
-      {pagination && (
-        <div className="flex items-center justify-between py-4">
-          <div className="text-sm text-muted-foreground">
-            {table.getFilteredRowModel().rows.length} items
-          </div>
-
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
+      {isShowPagination && (
+        <div className="mt-4">
+          <DataTablePagination
+            pageNumber={pagination?.pageNumber || 1}
+            pageSize={pagination?.pageSize || 10}
+            totalCount={pagination?.totalItems || 0}
+            totalPages={pagination?.totalPages || 0}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
         </div>
       )}
     </div>

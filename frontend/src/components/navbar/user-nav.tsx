@@ -11,7 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const UserNav = ({ onLogout }: { onLogout: () => void }) => {
+export const UserNav = ({
+  userName,
+  profilePicture,
+  onLogout,
+}: {
+  userName: string;
+  profilePicture: string;
+  onLogout: () => void;
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -20,12 +28,15 @@ const UserNav = ({ onLogout }: { onLogout: () => void }) => {
           className="relative !bg-transparent h-8 w-8 rounded-full !gap-0"
         >
           <Avatar className="h-10 w-10 !cursor-pointer ">
-            <AvatarImage src="" className="!cursor-pointer " />
+            <AvatarImage
+              src={profilePicture || ""}
+              className="!cursor-pointer "
+            />
             <AvatarFallback
               className="!bg-[var(--secondary-dark-color)] border !border-gray-700
                !text-white"
             >
-              AK
+              {userName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <ChevronDown className="!w-3 !h-3 ml-1 text-white" />
@@ -39,7 +50,7 @@ const UserNav = ({ onLogout }: { onLogout: () => void }) => {
         forceMount
       >
         <DropdownMenuLabel className="flex flex-col items-start gap-1">
-          <span className="font-semibold">Avinash Kumar</span>
+          <span className="font-semibold">{userName}</span>
           <span className="text-[13px] text-gray-400 font-light">
             Free Trial (2 days left)
           </span>
@@ -58,5 +69,3 @@ const UserNav = ({ onLogout }: { onLogout: () => void }) => {
     </DropdownMenu>
   );
 };
-
-export { UserNav };

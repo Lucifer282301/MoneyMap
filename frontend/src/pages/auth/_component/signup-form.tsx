@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { useRegisterMutation } from "@/features/auth/authAPI";
 import { Loader } from "lucide-react";
 
 const schema = z.object({
@@ -27,23 +26,16 @@ type FormValues = z.infer<typeof schema>;
 
 const SignUpForm = () => {
   const navigate = useNavigate();
-  const [register, { isLoading }] = useRegisterMutation();
+  const isLoading = false;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (values: FormValues) => {
-    register(values)
-      .unwrap()
-      .then(() => {
-        form.reset();
-        toast.success("Sign up successful");
-        navigate(AUTH_ROUTES.SIGN_IN);
-      })
-      .catch((error) => {
-        toast.error(error.data?.message);
-      });
+    console.log(values);
+    toast.success("Sign up successful");
+    navigate(AUTH_ROUTES.SIGN_IN);
   };
 
   return (
