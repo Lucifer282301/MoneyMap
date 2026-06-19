@@ -1,5 +1,11 @@
+import AppRoutes from "./routes";
+
 const App = () => {
-  return <div>MoneyMap</div>;
+  return (
+    <div>
+      <AppRoutes />
+    </div>
+  );
 };
 
 export default App;
