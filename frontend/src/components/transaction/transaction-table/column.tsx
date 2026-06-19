@@ -28,6 +28,7 @@ import {
   TransactionOptionsType,
 } from "@/constants";
 import { formatCurrency } from "@/lib/format-currency";
+import useEditTransactionDrawer from "@/hooks/use-edit-transaction-drawer";
 
 export type TransactionType = {
   id: string;
@@ -211,45 +212,46 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const isRecurring = row.original.isRecurring;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent className="w-44" align="end">
-            <DropdownMenuItem>
-              <Pencil className="mr-1 h-4 w-4" />
-              Edit
-            </DropdownMenuItem>
-
-            <DropdownMenuItem>
-              <Copy className="mr-1 h-4 w-4" />
-              Duplicate
-            </DropdownMenuItem>
-
-            {isRecurring && (
-              <>
-                <DropdownMenuItem>
-                  <StopCircleIcon className="mr-1 h-4 w-4" />
-                  Stop Recurring
-                </DropdownMenuItem>
-              </>
-            )}
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem className="!text-destructive">
-              <Trash2 className="mr-1 h-4 w-4 !text-destructive" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ActionsCell = ({ row }: { row: any }) => {
+  const isRecurring = row.original.isRecurring;
+  const transactionId = row.original.id;
+  const { onOpenDrawer } = useEditTransactionDrawer();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-44" align="end">
+        <DropdownMenuItem onClick={() => onOpenDrawer(transactionId)}>
+          <Pencil className="mr-1 h-4 w-4" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Copy className="mr-1 h-4 w-4" />
+          Duplicate
+        </DropdownMenuItem>
+        {isRecurring && (
+          <>
+            <DropdownMenuItem>
+              <StopCircleIcon className="mr-1 h-4 w-4" />
+              Stop Recurring
+            </DropdownMenuItem>
+          </>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="!text-destructive">
+          <Trash2 className="mr-1 h-4 w-4 !text-destructive" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

@@ -238,7 +238,7 @@ const TransactionForm = (props: {
                         {...field}
                         disabled={isScanning}
                         onValueChange={(value) => field.onChange(value || "")}
-                        placeholder="0.00"
+                        placeholder="$0.00"
                         prefix="$"
                       />
                     </div>
@@ -257,7 +257,7 @@ const TransactionForm = (props: {
                   <FormLabel>Category</FormLabel>
                   <SingleSelector
                     value={CATEGORIES.find((opt) => opt.value === field.value)}
-                    onChange={(option) => field.onChange(option.value)}
+                    onChange={(option) => field.onChange(option?.value)}
                     options={CATEGORIES}
                     placeholder="Select or type a category"
                     creatable
@@ -275,7 +275,7 @@ const TransactionForm = (props: {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Date</FormLabel>
-                  <Popover>
+                  <Popover modal={false}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -294,7 +294,10 @@ const TransactionForm = (props: {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent
+                      className="w-auto p-0 !pointer-events-auto"
+                      align="start"
+                    >
                       <CalendarComponent
                         mode="single"
                         selected={field.value}
@@ -366,11 +369,13 @@ const TransactionForm = (props: {
                       className="cursor-pointer"
                       onCheckedChange={(checked) => {
                         field.onChange(checked);
-                        if (!checked) {
+                        if (checked) {
                           form.setValue(
                             "frequency",
                             TRANSACTION_FREQUENCY.DAILY,
                           );
+                        } else {
+                          form.setValue("frequency", null);
                         }
                       }}
                     />
@@ -439,7 +444,11 @@ const TransactionForm = (props: {
           </div>
 
           <div className="sticky bottom-0 bg-white dark:bg-background pb-2">
-            <Button type="submit" className="w-full" disabled={isScanning}>
+            <Button
+              type="submit"
+              className="w-full !text-white"
+              disabled={isScanning}
+            >
               {isEdit ? "Update" : "Save"}
             </Button>
           </div>
