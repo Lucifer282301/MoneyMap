@@ -1,7 +1,14 @@
-import { TRANSACTION_FREQUENCY, TransactionOptionsType } from "@/constants";
+import {
+  TRANSACTION_FREQUENCY,
+  TransactionOptionsType,
+  PAYMENT_METHODS_ENUM,
+} from "@/constants";
 
 type RecurringIntervalType =
   (typeof TRANSACTION_FREQUENCY)[keyof typeof TRANSACTION_FREQUENCY];
+
+type PaymentMethodType =
+  (typeof PAYMENT_METHODS_ENUM)[keyof typeof PAYMENT_METHODS_ENUM];
 
 export interface CreateTransactionBody {
   title: string;
@@ -66,6 +73,17 @@ export interface AIScanReceiptData {
   receiptUrl: string;
 }
 
+export interface BulkTransactionType {
+  title: string;
+  type: TransactionOptionsType;
+  amount: number;
+  category: string;
+  description: string;
+  date: string;
+  paymentMethod: PaymentMethodType;
+  isRecurring: boolean;
+}
+
 export interface AIScanReceiptResponse {
   message: string;
   data: AIScanReceiptData;
@@ -79,4 +97,8 @@ export interface GetSingleTransactionResponse {
 export interface UpdateTransactionPayload {
   id: string;
   transaction: CreateTransactionBody;
+}
+
+export interface BulkImportTransactionPayload {
+  transactions: BulkTransactionType[];
 }

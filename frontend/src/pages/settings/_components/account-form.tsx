@@ -41,6 +41,8 @@ export const AccountForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
+  // const [updateUserMutation, { isLoading }] = useUpdateUserMutation();
+
   const isLoading = false;
 
   const form = useForm<AccountFormValues>({
@@ -60,6 +62,21 @@ export const AccountForm = () => {
     if (file) formData.append("profilePicture", file);
 
     toast.success("Account updated successfully");
+
+    //  updateUserMutation(formData)
+    //       .unwrap()
+    //       .then((response) => {
+    //         dispatch(
+    //           updateCredentials({ user:{
+    //             profilePicture: response.data.profilePicture,
+    //             name: response.data.name,
+    //           }})
+    //         );
+    //         toast.success("Account updated successfully");
+    //       })
+    //       .catch((error) => {
+    //         toast.error(error.data.message || "Failed to update account");
+    //       });
   };
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {

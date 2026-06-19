@@ -76,8 +76,17 @@ const sampleData = [
 const DashboardDataChart = ({ dateRange }: PropsType) => {
   const isMobile = useIsMobile();
 
-  const data = sampleData;
+  // const { data, isFetching } = useChartAnalyticsQuery({
+  //   preset: dateRange?.value,
+  // });
+  // const chartData = data?.data?.chartData || [];
+  // const totalExpenseCount = data?.data?.totalExpenseCount || 0;
+  // const totalIncomeCount = data?.data?.totalIncomeCount || 0;
+
   const isFetching = false;
+  const chartData = sampleData;
+  const totalIncomeCount = 20;
+  const totalExpenseCount = 10;
 
   if (isFetching) {
     return <ChartSkeleton />;
@@ -113,13 +122,9 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
                   ) : (
                     <TrendingDownIcon className="size-3 ml-2 text-destructive" />
                   )}
-                  {
-                    data.filter((item) =>
-                      key === TRANSACTION_OPTIONS[0]
-                        ? item.income > 0
-                        : item.expenses > 0,
-                    ).length
-                  }
+                  {key === TRANSACTION_OPTIONS[0]
+                    ? totalIncomeCount
+                    : totalExpenseCount}
                 </span>
               </div>
             );
@@ -127,7 +132,7 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
         </div>
       </CardHeader>
       <CardContent className="px-2 pt-2 sm:px-6 sm:pt-2 h-[300px]">
-        {data?.length === 0 ? (
+        {chartData?.length === 0 ? (
           <EmptyState
             title="No transaction data"
             description="There are no transactions recorded for this period."
@@ -137,7 +142,7 @@ const DashboardDataChart = ({ dateRange }: PropsType) => {
             config={chartConfig}
             className="aspect-auto h-[300px] w-full"
           >
-            <AreaChart data={data || []}>
+            <AreaChart data={chartData || []}>
               <defs>
                 <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor={COLORS[0]} stopOpacity={1.0} />
