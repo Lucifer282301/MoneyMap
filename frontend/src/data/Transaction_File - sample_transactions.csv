@@ -1,22 +1,56 @@
-
 Title,Type,Amount,Category,Description,Date,PaymentMethod
-Freelance Web Design,INCOME,1800,Freelance,Website redesign for local bakery,2024-04-05T10:00:00.000Z,BANK_TRANSFER
-Uber Ride,EXPENSE,23.8,Transport,Ride to airport,2024-04-06T08:15:00.000Z,CARD
-Netflix Subscription,EXPENSE,15.49,Entertainment,Monthly streaming service,2024-04-10T00:00:00.000Z,AUTO_DEBIT
-Grocery - Walmart,EXPENSE,112.35,Groceries,Weekly groceries,2024-04-12T17:30:00.000Z,CARD
-Spotify Family Plan,EXPENSE,16.99,Entertainment,Monthly music subscription,2024-04-13T00:00:00.000Z,CARD
-YouTube AdSense,INCOME,287.5,Side Hustle,Monthly YouTube ad revenue,2024-04-15T10:00:00.000Z,BANK_TRANSFER
-Shell Gas Station,EXPENSE,46.2,Transport,Fuel refill,2024-04-17T13:40:00.000Z,CARD
-Consulting Session,INCOME,600,Consulting,2-hour strategy session with startup,2024-04-20T15:00:00.000Z,BANK_TRANSFER
-AT&T Mobile Bill,EXPENSE,75,Utilities,Monthly phone bill,2024-04-25T00:00:00.000Z,AUTO_DEBIT
-Trader Joe's,EXPENSE,59.9,Groceries,Midweek grocery top-up,2024-04-28T18:10:00.000Z,CARD
-Logo Design Project,INCOME,450,Freelance,Logo and branding for new brand,2024-04-03T09:30:00.000Z,BANK_TRANSFER
-Starbucks Coffee,EXPENSE,8.75,Food & Drink,Coffee with client,2024-04-04T08:50:00.000Z,CARD
-Amazon Purchase,EXPENSE,129.99,Shopping,External hard drive,2024-04-07T14:20:00.000Z,CARD
-Dog Sitting Gig,INCOME,120,Side Hustle,Weekend dog sitting,2024-04-08T19:00:00.000Z,CASH
-Movie Night,EXPENSE,19.5,Entertainment,Cinema ticket,2024-04-09T20:15:00.000Z,CASH
-Gym Membership,EXPENSE,55,Fitness,Monthly gym pass,2024-04-11T06:30:00.000Z,AUTO_DEBIT
-Twitch Donation,INCOME,75,Side Hustle,Viewer tip for gaming stream,2024-04-14T21:45:00.000Z,CASH
-Electricity Bill,EXPENSE,92.6,Utilities,April power usage,2024-04-18T00:00:00.000Z,AUTO_DEBIT
-Freelance UX Audit,INCOME,850,Freelance,UI/UX audit for SaaS dashboard,2024-04-22T10:45:00.000Z,BANK_TRANSFER
-Target Shopping,EXPENSE,67.3,Shopping,Clothes and essentials,2024-04-27T15:25:00.000Z,CARD
+Software Engineer Salary,INCOME,5200,Salary,Monthly company salary,2026-06-01T09:00:00.000Z,BANK_TRANSFER
+Morning Coffee,EXPENSE,6.75,Food & Drink,Coffee before work,2026-06-02T08:15:00.000Z,MOBILE_PAYMENT
+Cloud Hosting Payment,EXPENSE,45,Software,Monthly VPS subscription,2026-06-03T10:00:00.000Z,CARD
+Mobile App Project,INCOME,1400,Freelance,React Native app development,2026-06-04T16:30:00.000Z,BANK_TRANSFER
+Supermarket Shopping,EXPENSE,135.25,Groceries,Monthly household supplies,2026-06-05T18:00:00.000Z,CARD
+Electric Bill,EXPENSE,95,Utilities,Home electricity payment,2026-06-06T07:00:00.000Z,AUTO_DEBIT
+Crypto Profit,INCOME,300,Investment,Crypto trading gain,2026-06-07T13:00:00.000Z,OTHER
+Cab Ride,EXPENSE,18.5,Transport,Ride to client office,2026-06-08T09:30:00.000Z,MOBILE_PAYMENT
+Online Book Purchase,EXPENSE,35.99,Education,Programming books purchase,2026-06-09T14:00:00.000Z,CARD
+Website Maintenance,INCOME,650,Freelance,Monthly website support,2026-06-10T15:00:00.000Z,BANK_TRANSFER
+Restaurant Lunch,EXPENSE,42.6,Food & Drink,Weekend lunch,2026-06-11T13:20:00.000Z,CARD
+Gaming Stream Donation,INCOME,150,Side Hustle,Viewer donations,2026-06-12T20:00:00.000Z,CASH
+Movie Ticket,EXPENSE,20,Entertainment,Cinema night,2026-06-13T19:30:00.000Z,CARD
+Fitness Subscription,EXPENSE,60,Fitness,Monthly gym membership,2026-06-14T06:00:00.000Z,AUTO_DEBIT
+UI Design Work,INCOME,900,Freelance,Dashboard design project,2026-06-15T11:00:00.000Z,BANK_TRANSFER
+Phone Recharge,EXPENSE,25,Utilities,Monthly mobile recharge,2026-06-16T08:00:00.000Z,MOBILE_PAYMENT
+Dividend Income,INCOME,180,Investment,Stock dividend received,2026-06-17T10:00:00.000Z,BANK_TRANSFER
+Pet Supplies,EXPENSE,65,Shopping,Dog food and accessories,2026-06-18T17:00:00.000Z,CARD
+Consulting Fee,INCOME,800,Consulting,Business consultation session,2026-06-19T12:00:00.000Z,BANK_TRANSFER
+Taxi Payment,EXPENSE,22,Transport,Airport travel,2026-06-20T18:00:00.000Z,CASH
+
+Digital Course Sale,INCOME,450,Side Hustle,Online course revenue,2026-05-02T12:00:00.000Z,OTHER
+Internet Bill,EXPENSE,55,Utilities,Home broadband bill,2026-05-05T09:00:00.000Z,AUTO_DEBIT
+Laptop Accessories,EXPENSE,150,Shopping,New keyboard and mouse,2026-05-08T15:30:00.000Z,CARD
+Backend API Project,INCOME,2000,Freelance,Node.js API development,2026-05-10T11:00:00.000Z,BANK_TRANSFER
+Fuel Expense,EXPENSE,75,Transport,Vehicle fuel payment,2026-05-12T18:00:00.000Z,MOBILE_PAYMENT
+Music Subscription,EXPENSE,14.99,Entertainment,Premium music plan,2026-05-15T00:00:00.000Z,AUTO_DEBIT
+Investment Return,INCOME,250,Investment,Mutual fund profit,2026-05-20T10:00:00.000Z,BANK_TRANSFER
+
+Annual Bonus,INCOME,3500,Salary,Performance bonus,2026-03-10T09:00:00.000Z,BANK_TRANSFER
+Home Repair,EXPENSE,400,Home,Kitchen repair service,2026-02-15T14:00:00.000Z,CARD
+Travel Booking,EXPENSE,850,Travel,Vacation flight tickets,2026-01-20T18:00:00.000Z,CARD
+
+Freelance Dashboard,INCOME,1100,Freelance,Analytics dashboard development,2025-12-10T12:00:00.000Z,BANK_TRANSFER
+Black Friday Shopping,EXPENSE,620,Shopping,Electronic gadgets purchase,2025-11-28T15:00:00.000Z,CARD
+Photography Gig,INCOME,700,Side Hustle,Event photography payment,2025-10-22T17:00:00.000Z,CASH
+Car Service,EXPENSE,280,Transport,Vehicle maintenance service,2025-09-12T10:00:00.000Z,CARD
+Adobe Subscription,EXPENSE,30,Software,Creative tools subscription,2025-08-01T00:00:00.000Z,AUTO_DEBIT
+App Development Contract,INCOME,2300,Freelance,Android application project,2025-07-15T11:00:00.000Z,BANK_TRANSFER
+Online Store Revenue,INCOME,900,Business,E-commerce monthly sales,2025-06-20T16:00:00.000Z,OTHER
+Coffee Meeting,EXPENSE,16,Food & Drink,Client discussion,2025-06-14T10:30:00.000Z,CASH
+Health Insurance,EXPENSE,220,Insurance,Monthly insurance premium,2025-05-05T00:00:00.000Z,AUTO_DEBIT
+Freelance Writing,INCOME,500,Freelance,Technical article writing,2025-04-10T13:00:00.000Z,BANK_TRANSFER
+Furniture Purchase,EXPENSE,780,Shopping,Office chair and desk,2025-03-18T14:00:00.000Z,CARD
+Stock Profit,INCOME,420,Investment,Stock market earnings,2025-02-20T11:00:00.000Z,BANK_TRANSFER
+Grocery Purchase,EXPENSE,98,Groceries,Weekly groceries,2025-01-25T17:30:00.000Z,MOBILE_PAYMENT
+
+Freelance Website,INCOME,1500,Freelance,Company website development,2025-01-10T10:00:00.000Z,BANK_TRANSFER
+Movie Subscription,EXPENSE,12.99,Entertainment,Streaming service payment,2025-02-01T00:00:00.000Z,AUTO_DEBIT
+Language Course,EXPENSE,199,Education,Online language training,2025-03-05T09:00:00.000Z,CARD
+Affiliate Income,INCOME,320,Side Hustle,Affiliate marketing commission,2025-04-15T11:00:00.000Z,OTHER
+Restaurant Bill,EXPENSE,75,Food & Drink,Family dinner outing,2025-05-18T20:00:00.000Z,CARD
+Mobile Game Revenue,INCOME,260,Business,Game advertisement earnings,2025-08-21T13:00:00.000Z,BANK_TRANSFER
+Charity Donation,EXPENSE,100,Donation,Community support donation,2025-10-01T12:00:00.000Z,CASH
+Year End Bonus,INCOME,2000,Salary,Company annual bonus,2025-12-20T10:00:00.000Z,BANK_TRANSFER

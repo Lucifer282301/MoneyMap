@@ -181,7 +181,6 @@ const SummaryCard = ({
           {title}
         </CardTitle>
       </CardHeader>
-
       <CardContent className="space-y-5">
         <div
           className={cn(
@@ -198,16 +197,13 @@ const SummaryCard = ({
             formattingFn={formatCountupValue}
           />
         </div>
-
         <div className="text-sm text-muted-foreground mt-2">
           {cardType === "savings" ? (
             <div className="flex items-center gap-1.5">
               <status.Icon className={cn("size-3.5", status.color)} />
-
               <span className={status.color}>
                 {status.label} {value !== 0 && `(${formatPercentage(value)})`}
               </span>
-
               {status.description && (
                 <span className="text-gray-400 ml-1">
                   • {status.description}
@@ -219,9 +215,7 @@ const SummaryCard = ({
           ) : value === 0 || status.label ? (
             <div className="flex items-center gap-1.5">
               <status.Icon className={cn("size-3.5", status.color)} />
-
               <span className={status.color}>{status.label}</span>
-
               {status.description && (
                 <span className="text-gray-400">• {status.description}</span>
               )}
@@ -245,7 +239,6 @@ const SummaryCard = ({
                   ) : (
                     <TrendingDownIcon className="size-3" />
                   )}
-
                   <span>
                     {formatPercentage(percentageChange || 0, {
                       showSign: percentageChange !== 0,
@@ -255,11 +248,9 @@ const SummaryCard = ({
                   </span>
                 </div>
               )}
-
               {percentageChange === 0 && (
                 <div className="flex items-center gap-0.5 text-gray-400">
                   <TrendingDownIcon className="size-3" />
-
                   <span>
                     {formatPercentage(0, {
                       showSign: false,
@@ -268,7 +259,6 @@ const SummaryCard = ({
                   </span>
                 </div>
               )}
-
               <span className="text-gray-400">• {dateRange?.label}</span>
             </div>
           ) : null}
