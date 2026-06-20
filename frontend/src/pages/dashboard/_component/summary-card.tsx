@@ -41,26 +41,7 @@ const getCardStatus = (
       };
     }
 
-    // Show spending warnings first if expenses are high
-    if (expenseRatio && expenseRatio > 75) {
-      return {
-        label: "High Spend",
-        color: "text-red-400",
-        Icon: TrendingDownIcon,
-        description: `${expenseRatio.toFixed(0)}% spent`,
-      };
-    }
-
-    if (expenseRatio && expenseRatio > 60) {
-      return {
-        label: "High Spend",
-        color: "text-orange-400",
-        Icon: TrendingDownIcon,
-        description: `${expenseRatio.toFixed(0)}% spent`,
-      };
-    }
-
-    // Then check savings rate
+    // Check savings percentage first
     if (value < 10) {
       return {
         label: "Low Savings",
@@ -79,7 +60,25 @@ const getCardStatus = (
       };
     }
 
-    // Good savings rate
+    // High savings → check if expense ratio is unusually high for warning
+    if (expenseRatio && expenseRatio > 75) {
+      return {
+        label: "High Spend",
+        color: "text-red-400",
+        Icon: TrendingDownIcon,
+        description: `${expenseRatio.toFixed(0)}% spent`,
+      };
+    }
+
+    if (expenseRatio && expenseRatio > 60) {
+      return {
+        label: "Warning: High Spend",
+        color: "text-orange-400",
+        Icon: TrendingDownIcon,
+        description: `${expenseRatio.toFixed(0)}% spent`,
+      };
+    }
+
     return {
       label: "Good Savings",
       color: "text-green-400",
@@ -122,10 +121,8 @@ const getCardStatus = (
 
 const getTrendDirection = (value: number, cardType: CardType) => {
   if (cardType === "expenses") {
-    // For expenses, lower is better
     return value <= 0 ? "positive" : "negative";
   }
-  // For income and balance, higher is better
   return value >= 0 ? "positive" : "negative";
 };
 
@@ -168,12 +165,14 @@ const SummaryCard = ({
     );
   }
 
-  const formattedValue = isPercentageValue
-    ? formatPercentage(value, { decimalPlaces: 1 })
-    : formatCurrency(value, {
-        isExpense: cardType === "expenses",
-        showSign: cardType === "balance" && value < 0,
-      });
+  const formatCountupValue = (val: number) => {
+    return isPercentageValue
+      ? formatPercentage(val, { decimalPlaces: 1 })
+      : formatCurrency(val, {
+          isExpense: cardType === "expenses",
+          showSign: cardType === "balance" && val < 0,
+        });
+  };
 
   return (
     <Card className="!border-none !border-0 !gap-0 !bg-white/5">
@@ -196,7 +195,7 @@ const SummaryCard = ({
             preserveValue
             decimals={2}
             decimalPlaces={2}
-            formattingFn={() => formattedValue}
+            formattingFn={formatCountupValue}
           />
         </div>
 
@@ -248,7 +247,7 @@ const SummaryCard = ({
                   )}
 
                   <span>
-                    {formatPercentage(Math.abs(percentageChange || 0), {
+                    {formatPercentage(percentageChange || 0, {
                       showSign: percentageChange !== 0,
                       isExpense: cardType === "expenses",
                       decimalPlaces: 1,
