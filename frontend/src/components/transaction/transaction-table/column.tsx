@@ -25,6 +25,11 @@ import { formatCurrency } from "@/lib/format-currency";
 import useEditTransactionDrawer from "@/hooks/use-edit-transaction-drawer";
 import { TransactionType } from "@/features/transaction/transactionType";
 import { TRANSACTION_FREQUENCY, TRANSACTION_OPTIONS } from "@/constants";
+import {
+  useDeleteTransactionMutation,
+  useDuplicateTransactionMutation,
+} from "@/features/transaction/transactionAPI";
+import { toast } from "sonner";
 
 type FrequencyInfo = {
   label: string;
@@ -235,32 +240,38 @@ const ActionsCell = ({ row }: { row: any }) => {
   const transactionId = row.original.id;
   const { onOpenDrawer } = useEditTransactionDrawer();
 
-  // const [duplicateTransaction,{isLoading:isDuplicating}] = useDuplicateTransactionMutation();
-  // const [deleteTransaction,{isLoading: isDeleting}] = useDeleteTransactionMutation();
+  const [duplicateTransaction, { isLoading: isDuplicating }] =
+    useDuplicateTransactionMutation();
 
-  const isDeleting = true;
-  const isDuplicating = false;
+  const [deleteTransaction, { isLoading: isDeleting }] =
+    useDeleteTransactionMutation();
 
   const handleDuplicate = (e: Event) => {
     e.preventDefault();
     if (isDuplicating) return;
 
-    // duplicateTransaction(transactionId).unwrap().then(() => {
-    //   toast.success("Transaction duplicated successfully");
-    // }).catch((error) => {
-    //   toast.error(error.data?.message || "Failed to duplicate transaction");
-    // });
+    duplicateTransaction(transactionId)
+      .unwrap()
+      .then(() => {
+        toast.success("Transaction duplicated successfully");
+      })
+      .catch((error) => {
+        toast.error(error.data?.message || "Failed to duplicate transaction");
+      });
   };
 
   const handleDelete = (e: Event) => {
     e.preventDefault();
     if (isDeleting) return;
 
-    // deleteTransaction(transactionId).unwrap().then(() => {
-    //   toast.success("Transaction deleted successfully");
-    // }).catch((error) => {
-    //   toast.error(error.data?.message || "Failed to delete transaction");
-    // });
+    deleteTransaction(transactionId)
+      .unwrap()
+      .then(() => {
+        toast.success("Transaction deleted successfully");
+      })
+      .catch((error) => {
+        toast.error(error.data?.message || "Failed to delete transaction");
+      });
   };
 
   return (

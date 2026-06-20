@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
 import { authenticationRoutePaths, protectedRoutePaths } from "./common/routes";
-
 import AppLayout from "@/layouts/app-layout";
 import BaseLayout from "@/layouts/base-layout";
 import AuthRoute from "./authRoute";
@@ -13,6 +11,7 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* AUthentication Route  */}
         <Route path="/" element={<AuthRoute />}>
           <Route element={<BaseLayout />}>
             {authenticationRoutePaths.map((route) => (
@@ -24,7 +23,6 @@ const AppRoutes = () => {
             ))}
           </Route>
         </Route>
-
         {/* Protected Route */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>

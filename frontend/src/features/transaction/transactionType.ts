@@ -91,7 +91,7 @@ export interface AIScanReceiptResponse {
 
 export interface GetSingleTransactionResponse {
   message: string;
-  data: TransactionType;
+  transaction: TransactionType;
 }
 
 export interface UpdateTransactionPayload {
