@@ -119,6 +119,7 @@ export const {
   useGetSingleTransactionQuery,
   useDuplicateTransactionMutation,
   useUpdateTransactionMutation,
+  useBulkImportTransactionMutation,
   useDeleteTransactionMutation,
   useBulkDeleteTransactionMutation,
 } = transactionApi;

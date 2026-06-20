@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { z } from "zod";
 import { ChevronDown, ChevronLeft, FileCheck } from "lucide-react";
@@ -13,11 +14,12 @@ import { toast } from "sonner";
 import { MAX_IMPORT_LIMIT } from "@/constants";
 import { BulkTransactionType } from "@/features/transaction/transactionType";
 import { useProgressLoader } from "@/hooks/use-progress-loader";
+import { useBulkImportTransactionMutation } from "@/features/transaction/transactionAPI";
 
 type ConfirmationStepProps = {
   file: File | null;
   mappings: Record<string, string>;
-  csvData: Record<string, string>[];
+  csvData: any[];
   onComplete: () => void;
   onBack: () => void;
 };
@@ -96,73 +98,11 @@ const ConfirmationStep = ({
     completionDelay: 500,
   });
 
-  // const [bulkImportTransaction] = useBulkImportTransactionMutation();
-
-  const getAssignFieldToMappedTransactions = () => {
-    let hasValidationErrors = false;
-    const results: Partial<BulkTransactionType>[] = [];
-
-    setErrors({});
-
-    csvData.forEach((row, index) => {
-      const transaction: Record<string, string | number | Date> = {};
-
-      Object.entries(mappings).forEach(([csvColumn, transactionField]) => {
-        if (transactionField === "Skip" || row[csvColumn] === undefined) {
-          return;
-        }
-
-        transaction[transactionField] =
-          transactionField === "amount"
-            ? Number(row[csvColumn])
-            : transactionField === "date"
-              ? new Date(row[csvColumn])
-              : row[csvColumn];
-      });
-
-      try {
-        const validated = transactionSchema.parse(transaction);
-        results.push(validated);
-      } catch (error) {
-        hasValidationErrors = true;
-
-        const message =
-          error instanceof z.ZodError
-            ? error.errors
-                .map((e) => {
-                  if (e.path[0] === "type") {
-                    return "Transaction type:- must be INCOME or EXPENSE";
-                  }
-
-                  if (e.path[0] === "paymentMethod") {
-                    return `Payment method:- must be one of: ${Object.values(
-                      PAYMENT_METHODS_ENUM,
-                    ).join(", ")}`;
-                  }
-
-                  return `${e.path[0]}: ${e.message}`;
-                })
-                .join("\n")
-            : "Invalid data";
-
-        setErrors((prev) => ({
-          ...prev,
-          [index + 1]: message,
-        }));
-      }
-    });
-
-    return {
-      transactions: results,
-      hasValidationErrors,
-    };
-  };
+  const [bulkImportTransaction] = useBulkImportTransactionMutation();
 
   const handleImport = () => {
     const { transactions, hasValidationErrors } =
       getAssignFieldToMappedTransactions();
-
-    console.log(transactions, "transactions");
 
     if (hasErrors || hasValidationErrors) {
       return;
@@ -176,30 +116,87 @@ const ConfirmationStep = ({
     resetProgress();
     startProgress(10);
 
+    // Start progress
     let currentProgress = 10;
-
     const interval = setInterval(() => {
       const increment = currentProgress < 90 ? 10 : 1;
-
       currentProgress = Math.min(currentProgress + increment, 90);
-
       updateProgress(currentProgress);
     }, 250);
 
-    const payload = {
-      transactions: transactions as BulkTransactionType[],
+    const payload = { transactions: transactions as BulkTransactionType[] };
+
+    bulkImportTransaction(payload)
+      .unwrap()
+      .then(() => {
+        updateProgress(100);
+        toast.success("Imported transactions successfully");
+      })
+      .catch((error) => {
+        resetProgress();
+        toast.error(error.data?.message || "Failed to import transactions");
+      })
+      .finally(() => {
+        clearInterval(interval);
+        setTimeout(() => {
+          doneProgress();
+          resetProgress();
+          onComplete();
+        }, 500);
+      });
+  };
+
+  const getAssignFieldToMappedTransactions = () => {
+    let hasValidationErrors = false;
+    const results: Partial<any>[] = [];
+
+    csvData.forEach((row, index) => {
+      const transaction: Record<string, string> = {};
+      // Apply mappings
+      Object.entries(mappings).forEach(([csvColumn, transactionField]) => {
+        if (transactionField === "Skip" || row[csvColumn] === undefined) {
+          return;
+        }
+
+        transaction[transactionField] =
+          transactionField === "amount"
+            ? Number(row[csvColumn])
+            : transactionField === "date"
+              ? new Date(row[csvColumn])
+              : row[csvColumn];
+      });
+      try {
+        const validated = transactionSchema.parse(transaction);
+        results.push(validated);
+      } catch (error) {
+        hasValidationErrors = true;
+        const message =
+          error instanceof z.ZodError
+            ? error.errors
+                .map((e) => {
+                  if (e.path[0] === "type") {
+                    return "Transaction type:- must be INCOME or EXPENSE";
+                  }
+                  if (e.path[0] === "paymentMethod") {
+                    return (
+                      "Payment method:- must be one of: " +
+                      Object.values(PAYMENT_METHODS_ENUM).join(", ")
+                    );
+                  }
+                  return `${e.path[0]}: ${e.message}`;
+                })
+                .join("\n")
+            : "Invalid data";
+        setErrors((prev) => ({
+          ...prev,
+          [index + 1]: message,
+        }));
+      }
+    });
+    return {
+      transactions: results,
+      hasValidationErrors,
     };
-
-    console.log(payload, "payload");
-
-    setTimeout(() => {
-      clearInterval(interval);
-      doneProgress();
-      resetProgress();
-      onComplete();
-    }, 2000);
-
-    // API implementation remains unchanged
   };
 
   const hasErrors = Object.keys(errors).length > 0;
@@ -214,7 +211,6 @@ const ConfirmationStep = ({
           Review your settings before importing
         </DialogDescription>
       </DialogHeader>
-
       <div className="space-y-4">
         <div className="border rounded-md p-4 w-full">
           <h4 className="flex items-center gap-1 font-medium mb-2">
@@ -240,7 +236,6 @@ const ConfirmationStep = ({
             </div>
           </div>
         </div>
-
         {hasErrors && (
           <div
             className="w-full block border border-red-100 bg-[#fef2f2] dark:bg-background
@@ -269,7 +264,6 @@ const ConfirmationStep = ({
             </div>
           </div>
         )}
-
         {isLoading && (
           <div className="space-y-2">
             <Progress value={progress} className="h-2" />

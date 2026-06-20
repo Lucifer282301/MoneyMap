@@ -39,8 +39,8 @@ type ColumnMappingStepProps = {
 };
 
 type AvailableAttributeType =
-  | { fieldName: string; required?: never }
-  | TransactionField;
+  | { fieldName: string; required?: never } // For the "Do not import" option
+  | TransactionField; // For the actual fields
 
 const ColumnMappingStep = ({
   csvColumns,
@@ -66,6 +66,7 @@ const ColumnMappingStep = ({
     }));
 
     if (errors[csvColumn]) {
+      // Delete the csvColumn from error
       setErrors((prev) => {
         const updatedErrors = { ...prev };
         delete updatedErrors[csvColumn];
@@ -74,6 +75,7 @@ const ColumnMappingStep = ({
     }
   };
 
+  // Calculate the count of non-"none" mappings
   const validateMappings = () => {
     const newErrors: Record<string, string> = {};
     const usedFields = new Set<string>();
