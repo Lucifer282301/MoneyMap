@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ImportIcon } from "lucide-react";
 import FileUploadStep from "./fileupload-step";
@@ -94,7 +94,11 @@ const ImportTransactionModal = () => {
         <ImportIcon className="!w-5 !h-5" />
         Bulk Import
       </Button>
-      <DialogContent className="max-w-2xl min-h-[40vh]">
+      <DialogContent
+        className="max-w-2xl min-h-[40vh]"
+        aria-describedby={undefined}
+      >
+        <DialogTitle className="sr-only">Import Transactions</DialogTitle>
         {renderStep()}
       </DialogContent>
     </Dialog>

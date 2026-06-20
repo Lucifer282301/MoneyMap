@@ -6,7 +6,6 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
@@ -16,17 +15,26 @@ const AddTransactionDrawer = () => {
   const [open, setOpen] = useState(false);
 
   const onCloseDrawer = () => {
+    (document.activeElement as HTMLElement)?.blur();
     setOpen(false);
   };
 
+  const handleOpen = () => {
+    (document.activeElement as HTMLElement)?.blur();
+    setOpen(true);
+  };
+
+  const handleOpenChange = (next: boolean) => {
+    if (!next) (document.activeElement as HTMLElement)?.blur();
+    setOpen(next);
+  };
+
   return (
-    <Drawer direction="right" open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button className="!cursor-pointer !text-white">
-          <PlusIcon className="h-4 w-4" />
-          Add Transaction
-        </Button>
-      </DrawerTrigger>
+    <Drawer direction="right" open={open} onOpenChange={handleOpenChange}>
+      <Button className="!cursor-pointer !text-white" onClick={handleOpen}>
+        <PlusIcon className="h-4 w-4" />
+        Add Transaction
+      </Button>
       <DrawerContent className="max-w-md overflow-hidden overflow-y-auto">
         <DrawerHeader className="relative">
           <div>

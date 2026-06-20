@@ -71,11 +71,11 @@ export const reportColumns: ColumnDef<ReportType>[] = [
     ),
   },
   {
-    id: "-",
+    id: "spacer-1",
     header: "",
   },
   {
-    id: "-",
+    id: "spacer-2",
     header: "",
   },
 ];

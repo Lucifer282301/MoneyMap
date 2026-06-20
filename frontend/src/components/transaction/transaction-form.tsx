@@ -428,6 +428,7 @@ const TransactionForm = (props: {
                       checked={field.value}
                       className="cursor-pointer"
                       onCheckedChange={(checked) => {
+                        (document.activeElement as HTMLElement)?.blur();
                         field.onChange(checked);
                         if (checked) {
                           form.setValue(

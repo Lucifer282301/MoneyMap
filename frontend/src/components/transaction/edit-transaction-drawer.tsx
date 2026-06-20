@@ -8,10 +8,16 @@ import {
 import TransactionForm from "./transaction-form";
 import useEditTransactionDrawer from "@/hooks/use-edit-transaction-drawer";
 
+const blurAndClose = (closeFn: () => void) => () => {
+  (document.activeElement as HTMLElement)?.blur();
+  closeFn();
+};
+
 const EditTransactionDrawer = () => {
   const { open, transactionId, onCloseDrawer } = useEditTransactionDrawer();
+  const handleClose = blurAndClose(onCloseDrawer);
   return (
-    <Drawer open={open} onOpenChange={onCloseDrawer} direction="right">
+    <Drawer open={open} onOpenChange={handleClose} direction="right">
       <DrawerContent className="max-w-md overflow-hidden overflow-y-auto">
         <DrawerHeader>
           <DrawerTitle className="text-xl font-semibold">
@@ -24,7 +30,7 @@ const EditTransactionDrawer = () => {
         <TransactionForm
           isEdit
           transactionId={transactionId}
-          onCloseDrawer={onCloseDrawer}
+          onCloseDrawer={handleClose}
         />
       </DrawerContent>
     </Drawer>

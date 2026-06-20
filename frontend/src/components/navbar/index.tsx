@@ -64,6 +64,7 @@ const Navbar = () => {
             <nav className="hidden md:flex items-center gap-x-2 overflow-x-auto">
               {routes?.map((route) => (
                 <Button
+                  key={route.href}
                   size="sm"
                   variant="ghost"
                   className={cn(
@@ -76,7 +77,7 @@ const Navbar = () => {
                   )}
                   asChild
                 >
-                  <NavLink key={route.href} to={route.href}>
+                  <NavLink to={route.href}>
                     {route.label}
                   </NavLink>
                 </Button>
@@ -89,6 +90,7 @@ const Navbar = () => {
                 <nav className="flex flex-col gap-y-2 pt-9">
                   {routes?.map((route) => (
                     <Button
+                      key={route.href}
                       size="sm"
                       variant="ghost"
                       className={cn(
@@ -100,7 +102,7 @@ const Navbar = () => {
                       )}
                       asChild
                     >
-                      <NavLink key={route.href} to={route.href}>
+                      <NavLink to={route.href}>
                         {route.label}
                       </NavLink>
                     </Button>

@@ -10,6 +10,7 @@ const useEditTransactionDrawer = () => {
     parseAsString.withDefault(""),
   );
   const onOpenDrawer = (transactionId: string) => {
+    (document.activeElement as HTMLElement)?.blur();
     setTransactionId(transactionId);
     setOpen(true);
   };

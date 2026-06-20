@@ -6,7 +6,6 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { CalendarIcon, XIcon } from "lucide-react";
 import { useState } from "react";
@@ -19,14 +18,20 @@ const ScheduleReportDrawer = () => {
     setOpen(false);
   };
 
+  const handleOpen = () => {
+    (document.activeElement as HTMLElement)?.blur();
+    setOpen(true);
+  };
+
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button className="!cursor-pointer !px-6 !text-white">
-          <CalendarIcon className="h-4 w-4" />
-          <span>Report Settings</span>
-        </Button>
-      </DrawerTrigger>
+      <Button
+        className="!cursor-pointer !px-6 !text-white"
+        onClick={handleOpen}
+      >
+        <CalendarIcon className="h-4 w-4" />
+        <span>Report Settings</span>
+      </Button>
 
       <DrawerContent className="max-w-md overflow-hidden overflow-y-auto">
         <DrawerHeader className="relative">
