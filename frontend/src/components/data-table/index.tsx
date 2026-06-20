@@ -4,7 +4,6 @@ import {
   ColumnDef,
   getCoreRowModel,
   getFilteredRowModel,
-  // getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   flexRender,
@@ -106,9 +105,6 @@ export const DataTable = <TData,>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    // getPaginationRowModel: isShowPagination
-    //   ? getPaginationRowModel()
-    //   : undefined,
   });
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -153,7 +149,6 @@ export const DataTable = <TData,>({
               className="max-w-sm"
             />
           )}
-
           {filters.map(({ key, label, options }) => (
             <Select
               key={key}
@@ -167,7 +162,6 @@ export const DataTable = <TData,>({
                   <SelectValue placeholder={label} />
                 </div>
               </SelectTrigger>
-
               <SelectContent>
                 {options.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>

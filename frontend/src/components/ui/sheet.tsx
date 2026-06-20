@@ -1,5 +1,3 @@
-"use client";
-
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import type { ComponentProps } from "react";
 import { XIcon } from "lucide-react";
@@ -30,7 +28,7 @@ const SheetOverlay = ({
     data-slot="sheet-overlay"
     className={cn(
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-      className
+      className,
     )}
     {...props}
   />
@@ -60,7 +58,7 @@ const SheetContent = ({
           "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b",
         side === "bottom" &&
           "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
-        className
+        className,
       )}
       {...props}
     >
@@ -73,10 +71,7 @@ const SheetContent = ({
   </SheetPortal>
 );
 
-const SheetHeader = ({
-  className,
-  ...props
-}: ComponentProps<"div">) => (
+const SheetHeader = ({ className, ...props }: ComponentProps<"div">) => (
   <div
     data-slot="sheet-header"
     className={cn("flex flex-col gap-1.5 p-4", className)}
@@ -84,10 +79,7 @@ const SheetHeader = ({
   />
 );
 
-const SheetFooter = ({
-  className,
-  ...props
-}: ComponentProps<"div">) => (
+const SheetFooter = ({ className, ...props }: ComponentProps<"div">) => (
   <div
     data-slot="sheet-footer"
     className={cn("mt-auto flex flex-col gap-2 p-4", className)}

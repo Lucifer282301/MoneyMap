@@ -6,9 +6,7 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export const Select = (
-  props: ComponentProps<typeof SelectPrimitive.Root>,
-) => {
+export const Select = (props: ComponentProps<typeof SelectPrimitive.Root>) => {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
 };
 
@@ -94,10 +92,7 @@ export const SelectLabel = ({
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn(
-        "text-muted-foreground px-2 py-1.5 text-xs",
-        className,
-      )}
+      className={cn("text-muted-foreground px-2 py-1.5 text-xs", className)}
       {...props}
     />
   );
@@ -135,10 +130,7 @@ export const SelectSeparator = ({
   return (
     <SelectPrimitive.Separator
       data-slot="select-separator"
-      className={cn(
-        "bg-border pointer-events-none -mx-1 my-1 h-px",
-        className,
-      )}
+      className={cn("bg-border pointer-events-none -mx-1 my-1 h-px", className)}
       {...props}
     />
   );
