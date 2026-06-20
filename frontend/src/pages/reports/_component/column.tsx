@@ -39,6 +39,7 @@ export const reportColumns: ColumnDef<ReportType>[] = [
         [REPORT_STATUS.FAILED]: "bg-red-100 text-red-800",
         [REPORT_STATUS.PENDING]: "bg-yellow-100 text-yellow-800",
         [REPORT_STATUS.PROCESSING]: "bg-blue-100 text-blue-800",
+        [REPORT_STATUS.NO_ACTIVITY]: "bg-gray-100 text-gray-800",
       };
 
       const style =
