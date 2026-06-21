@@ -240,31 +240,27 @@ export const bulkTransactionService = async (
   userId: string,
   transactions: CreateTransactionType[],
 ) => {
-  try {
-    const bulkOps = transactions.map((tx) => ({
-      insertOne: {
-        document: {
-          ...tx,
-          userId,
-          isRecurring: false,
-          nextRecurringDate: null,
-          recurringInterval: null,
-          lastProcessed: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+  const bulkOps = transactions.map((tx) => ({
+    insertOne: {
+      document: {
+        ...tx,
+        userId,
+        isRecurring: false,
+        nextRecurringDate: null,
+        recurringInterval: null,
+        lastProcessed: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
-    }));
+    },
+  }));
 
-    const result = await TransactionModel.bulkWrite(bulkOps, { ordered: true });
+  const result = await TransactionModel.bulkWrite(bulkOps, { ordered: true });
 
-    return {
-      insertedCount: result.insertedCount,
-      success: true,
-    };
-  } catch (error) {
-    throw error;
-  }
+  return {
+    insertedCount: result.insertedCount,
+    success: true,
+  };
 };
 
 export const scanReceiptService = async (
@@ -274,59 +270,55 @@ export const scanReceiptService = async (
     throw new BadRequestException("No file uploaded");
   }
 
-  try {
-    if (!file.path) {
-      throw new BadRequestException("Failed to upload file");
-    }
-
-    const responseData = await axios.get(file.path, {
-      responseType: "arraybuffer",
-    });
-    const base64String = Buffer.from(responseData.data).toString("base64");
-
-    if (!base64String) {
-      throw new BadRequestException("Could not process file");
-    }
-
-    const result = await genAI.models.generateContent({
-      model: genAIModel,
-      contents: [
-        createUserContent([
-          receiptPrompt,
-          createPartFromBase64(base64String, file.mimetype),
-        ]),
-      ],
-      config: {
-        temperature: 0,
-        topP: 1,
-        responseMimeType: "application/json",
-      },
-    });
-
-    const response = result.text;
-    const cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
-
-    if (!cleanedText) {
-      throw new BadRequestException("Could not read receipt content");
-    }
-
-    const data = JSON.parse(cleanedText);
-
-    if (!data.amount || !data.date) {
-      throw new BadRequestException("Receipt missing required information");
-    }
-
-    return {
-      title: data.title || "Receipt",
-      amount: data.amount,
-      date: data.date,
-      description: data.description,
-      category: data.category,
-      paymentMethod: data.paymentMethod,
-      type: data.type,
-      receiptUrl: file.path,
-    };
-  } catch (error) {
-    throw error;
+  if (!file.path) {
+    throw new BadRequestException("Failed to upload file");
   }
+
+  const responseData = await axios.get(file.path, {
+    responseType: "arraybuffer",
+  });
+  const base64String = Buffer.from(responseData.data).toString("base64");
+
+  if (!base64String) {
+    throw new BadRequestException("Could not process file");
+  }
+
+  const result = await genAI.models.generateContent({
+    model: genAIModel,
+    contents: [
+      createUserContent([
+        receiptPrompt,
+        createPartFromBase64(base64String, file.mimetype),
+      ]),
+    ],
+    config: {
+      temperature: 0,
+      topP: 1,
+      responseMimeType: "application/json",
+    },
+  });
+
+  const response = result.text;
+  const cleanedText = response?.replace(/```(?:json)?\n?/g, "").trim();
+
+  if (!cleanedText) {
+    throw new BadRequestException("Could not read receipt content");
+  }
+
+  const data = JSON.parse(cleanedText);
+
+  if (!data.amount || !data.date) {
+    throw new BadRequestException("Receipt missing required information");
+  }
+
+  return {
+    title: data.title || "Receipt",
+    amount: data.amount,
+    date: data.date,
+    description: data.description,
+    category: data.category,
+    paymentMethod: data.paymentMethod,
+    type: data.type,
+    receiptUrl: file.path,
+  };
 };

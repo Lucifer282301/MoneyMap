@@ -49,7 +49,6 @@ export const AccountForm = () => {
   });
 
   const onSubmit = (values: AccountFormValues) => {
-    console.log(values);
     if (isLoading) return;
 
     const formData = new FormData();

@@ -13,8 +13,6 @@ export const processRecurringTransactions = async () => {
       nextRecurringDate: { $lte: now },
     }).cursor();
 
-    console.log("Starting recurring process");
-
     for await (const tx of transactionCursor) {
       const nextDate = calculateNextOccurrence(
         tx.nextRecurringDate!,

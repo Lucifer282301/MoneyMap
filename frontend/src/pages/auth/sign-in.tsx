@@ -8,7 +8,7 @@ const SignIn = () => {
   const { theme } = useTheme();
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10 md:pt-6">
+      <div className="flex flex-col gap-4 p-6 md:p-10 md:pt-6 bg-background">
         <div className="flex justify-center gap-2 md:justify-start">
           <Logo url="/" />
         </div>
