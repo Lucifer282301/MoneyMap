@@ -2,7 +2,13 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Loader, CheckCircle2, AlertTriangle } from "lucide-react";
+import {
+  Loader,
+  CheckCircle2,
+  AlertTriangle,
+  Sparkles,
+  XCircle,
+} from "lucide-react";
 import ConfirmationDialog from "@/components/ui/confirmation-dialog";
 import {
   useGetSubscriptionStatusQuery,
@@ -39,7 +45,9 @@ const Billing = () => {
 
   const subscriptionYearly = subscription?.interval === "yearly";
   const isYearly = isPro
-    ? (pendingYearly !== null ? pendingYearly : subscriptionYearly)
+    ? pendingYearly !== null
+      ? pendingYearly
+      : subscriptionYearly
     : localYearly;
 
   const hasPendingSwitch =
@@ -72,7 +80,9 @@ const Billing = () => {
     const newInterval = pendingYearly ? "yearly" : "monthly";
     try {
       await switchInterval({ interval: newInterval }).unwrap();
-      toast.success(`Switched to ${newInterval.toUpperCase()} plan successfully.`);
+      toast.success(
+        `Switched to ${newInterval.toUpperCase()} plan successfully.`,
+      );
       setPendingYearly(null);
     } catch {
       toast.error("Failed to switch plan. Please try again.");
@@ -117,7 +127,7 @@ const Billing = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* Trial expiring banner — pro but ≤5 days left */}
+          {/* Yellow banner: active Pro but renewal is within 5 days (isExpiringSoon = isPro && daysLeft ≤ 5) */}
           {isExpiringSoon && (
             <div className="flex items-start gap-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3">
               <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" />
@@ -133,22 +143,68 @@ const Billing = () => {
             </div>
           )}
 
-          {/* Trial expired banner — had a subscription but no longer active */}
-          {!isPro && subscription?.subscriptionStatus !== null && (
-            <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-              <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+          {/* Blue banner: new user who has never subscribed — subscriptionStatus is null, interval is null */}
+          {!isPro && subscription?.subscriptionStatus === null && (
+            <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3">
+              <Sparkles className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-red-800">
-                  Trial Expired
+                <p className="text-sm font-semibold text-blue-800">
+                  Get Started with Pro
                 </p>
-                <p className="text-sm text-red-700">
-                  Your trial has expired, please upgrade to continue.
+                <p className="text-sm text-blue-700">
+                  Buy a plan to unlock all Pro features and take control of your
+                  finances.
                 </p>
               </div>
             </div>
           )}
 
-          {/* Active pro banner — pro and not expiring soon */}
+          {/* Orange banner: user manually cancelled — subscriptionStatus is "canceled", plan downgraded to free */}
+          {!isPro && subscription?.subscriptionStatus === "cancelled" && (
+            <div className="flex items-start gap-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+              <XCircle className="h-4 w-4 text-orange-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-orange-800">
+                  Subscription Cancelled
+                </p>
+                <p className="text-sm text-orange-700">
+                  Your subscription has been cancelled.
+                  {subscription.currentPeriodEnd && (
+                    <>
+                      {" "}
+                      Access ended on{" "}
+                      {format(
+                        new Date(subscription.currentPeriodEnd),
+                        "MMMM d, yyyy",
+                      )}
+                      .
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Red banner: trial ended naturally — had an active period but it expired without cancellation */}
+          {!isPro &&
+            subscription?.subscriptionStatus !== null &&
+            subscription?.subscriptionStatus !== "cancelled" &&
+            subscription?.currentPeriodEnd &&
+            new Date(subscription.currentPeriodEnd) < new Date() && (
+              <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+                <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-red-800">
+                    Trial Expired
+                  </p>
+                  <p className="text-sm text-red-700">
+                    Your trial has expired, please upgrade to continue.
+                  </p>
+                </div>
+              </div>
+            )}
+
+          {/* Green banner: active Pro with more than 5 days left — shows current interval and renewal date */}
           {isPro && !isExpiringSoon && (
             <div className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
               <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
@@ -260,7 +316,6 @@ const Billing = () => {
         confirmText="Yes, cancel"
         cancelText="Keep Pro"
       />
-
     </div>
   );
 };
