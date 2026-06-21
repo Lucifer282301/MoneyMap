@@ -67,3 +67,25 @@ export const REPORT_STATUS = {
 } as const;
 
 export type ReportStatusType = keyof typeof REPORT_STATUS;
+
+export const MONTHLY_PRICE = 9.99;
+
+export const MONTHLY_FEATURES = [
+  "Unlimited transactions",
+  "Advanced analytics",
+  "Email support",
+  "Basic reports",
+];
+
+export const YEARLY_FEATURES = [
+  "Everything in Monthly",
+  "Priority support",
+  "Advanced reports",
+  "API access",
+  "Dedicated account manager",
+];
+
+export const PLAN_CONFIG = {
+  monthly: { label: "Billed monthly", period: "/ month" },
+  yearly: { label: "Billed yearly", period: "/ year" },
+} as const;

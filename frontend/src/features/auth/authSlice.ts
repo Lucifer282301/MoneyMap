@@ -5,6 +5,7 @@ interface AuthState {
   expiresAt: number | null;
   user: User | null;
   reportSetting: ReportSetting | null;
+  savingsPercentage: number | null;
 }
 
 const initialState: AuthState = {
@@ -12,7 +13,11 @@ const initialState: AuthState = {
   expiresAt: null,
   user: null,
   reportSetting: null,
+  savingsPercentage: null,
 };
+
+const randomSavingsPercentage = () =>
+  Math.floor(Math.random() * 16) + 10;
 
 interface User {
   id: number;
@@ -36,6 +41,7 @@ const authSlice = createSlice({
       state.expiresAt = action.payload.expiresAt;
       state.user = action.payload.user;
       state.reportSetting = action.payload.reportSetting;
+      state.savingsPercentage = randomSavingsPercentage();
     },
     updateCredentials: (state, action) => {
       const { accessToken, expiresAt, user, reportSetting } = action.payload;
@@ -51,6 +57,7 @@ const authSlice = createSlice({
       state.expiresAt = null;
       state.user = null;
       state.reportSetting = null;
+      state.savingsPercentage = null;
     },
   },
 });

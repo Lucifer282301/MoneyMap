@@ -6,6 +6,11 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   profilePicture: string | null;
+  subscriptionId?: string;
+  plan: "free" | "pro";
+  subscriptionStatus?: string;
+  interval?: "monthly" | "yearly";
+  trialEnd?: Date;
   createdAt: Date;
   updatedAt: Date;
   comparePassword: (password: string) => Promise<boolean>;
@@ -29,6 +34,25 @@ const userSchema = new Schema<UserDocument>(
     profilePicture: {
       type: String,
       default: null,
+    },
+    subscriptionId: {
+      type: String,
+    },
+    plan: {
+      type: String,
+      enum: ["free", "pro"],
+      default: "free",
+    },
+    subscriptionStatus: {
+      type: String,
+    },
+    interval: {
+      type: String,
+      enum: ["monthly", "yearly"],
+      default: "monthly",
+    },
+    trialEnd: {
+      type: Date,
     },
     password: {
       type: String,
