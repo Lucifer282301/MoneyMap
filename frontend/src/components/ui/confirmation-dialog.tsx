@@ -35,8 +35,8 @@ const ConfirmationDialog = ({
     startTransition(async () => {
       try {
         await onConfirm();
-      } catch (error) {
-        console.error("Confirmation action failed:", error);
+      } catch {
+        // errors handled by onConfirm callers
       }
     });
   };

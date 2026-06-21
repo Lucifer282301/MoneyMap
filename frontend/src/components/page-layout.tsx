@@ -1,4 +1,3 @@
-
 import { type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -15,8 +14,8 @@ interface PropsType {
   renderPageHeader?: ReactNode;
 }
 
-const PageLayout = ({ 
-  children, 
+const PageLayout = ({
+  children,
   className,
   title,
   subtitle,
@@ -24,22 +23,26 @@ const PageLayout = ({
   showHeader = true,
   addMarginTop = false,
   renderPageHeader,
- }: PropsType) => {
+}: PropsType) => {
   return (
     <div>
       {showHeader && (
-        <PageHeader 
-          title={title} 
-          subtitle={subtitle} 
-          rightAction={rightAction} 
+        <PageHeader
+          title={title}
+          subtitle={subtitle}
+          rightAction={rightAction}
           renderPageHeader={renderPageHeader}
         />
       )}
-    <div className={cn("w-full max-w-[var(--max-width)] mx-auto pt-8",
-      addMarginTop && "-mt-20",
-      className)}>
-      {children}
-    </div>
+      <div
+        className={cn(
+          "w-full max-w-(--max-width) mx-auto pt-8",
+          addMarginTop && "-mt-20",
+          className,
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 };

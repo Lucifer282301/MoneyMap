@@ -1,13 +1,10 @@
 import "dotenv/config";
 import "./config/passport.config";
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import passport from "passport";
 import { ENV } from "./config/env.config";
-import { HTTPSTATUS } from "./config/http.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
-import { BadRequestException } from "./utils/app-error";
-import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import connectDatabase from "./config/database.config";
 import authRoutes from "./routes/auth.routes";
 import { passportAuthenticateJwt } from "./config/passport.config";
@@ -30,16 +27,6 @@ app.use(
   cors({
     origin: ENV.FRONTEND_ORIGIN,
     credentials: true,
-  }),
-);
-
-app.get(
-  "/",
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    throw new BadRequestException("This is a error");
-    res.status(HTTPSTATUS.OK).json({
-      message: "Hello World.",
-    });
   }),
 );
 

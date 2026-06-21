@@ -14,7 +14,7 @@ import { MAX_FILE_SIZE, MAX_IMPORT_LIMIT } from "@/constants";
 import { useProgressLoader } from "@/hooks/use-progress-loader";
 
 interface CsvRow {
-  [key: string]: string | undefined; // Define that rows can be indexed with strings
+  [key: string]: string | undefined;
 }
 
 interface CsvColumn {
@@ -55,13 +55,11 @@ const FileUploadStep = ({ onFileUpload }: FileUploadStepProps) => {
       return;
     }
 
-    resetProgress(); // Clear any previous progress
+    resetProgress();
     startProgress();
 
     try {
-      // First read the file as text
       const fileText = await file.text();
-      // Then parse the CSV text
       readString<CsvRow>(fileText, {
         header: true,
         skipEmptyLines: true,
@@ -125,7 +123,7 @@ const FileUploadStep = ({ onFileUpload }: FileUploadStepProps) => {
 
         <Button
           size="lg"
-          className="!bg-[var(--secondary-dark-color)] text-white min-w-44"
+          className="bg-(--secondary-dark-color)! text-white min-w-44"
           onClick={() => fileInputRef.current?.click()}
           disabled={isLoading}
         >
