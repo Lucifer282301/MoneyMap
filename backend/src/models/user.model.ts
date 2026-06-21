@@ -9,7 +9,8 @@ export interface UserDocument extends Document {
   subscriptionId?: string | null;
   plan: "free" | "pro";
   subscriptionStatus?: string;
-  interval: "monthly" | "yearly";
+  interval?: "monthly" | "yearly";
+  currentPeriodEnd?: Date;
   trialEnd?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -49,7 +50,11 @@ const userSchema = new Schema<UserDocument>(
     interval: {
       type: String,
       enum: ["monthly", "yearly"],
-      default: "monthly",
+      default: null,
+    },
+    currentPeriodEnd: {
+      type: Date,
+      default: null,
     },
     trialEnd: {
       type: Date,

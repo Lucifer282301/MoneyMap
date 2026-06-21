@@ -44,9 +44,10 @@ const chartConfig = {
 const DashboardDataChart = ({ dateRange }: PropsType) => {
   const isMobile = useIsMobile();
 
-  const { data, isFetching } = useChartAnalyticsQuery({
-    preset: dateRange?.value,
-  });
+  const { data, isFetching } = useChartAnalyticsQuery(
+    { preset: dateRange?.value },
+    { skip: !dateRange },
+  );
   const chartData = data?.data?.chartData || [];
   const totalExpenseCount = data?.data?.totalExpenseCount || 0;
   const totalIncomeCount = data?.data?.totalIncomeCount || 0;

@@ -3,35 +3,28 @@ import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { HTTPSTATUS } from "../config/http.config";
 import UserModel from "../models/user.model";
 
+const periodEndDate = (interval: "monthly" | "yearly") =>
+  new Date(Date.now() + (interval === "yearly" ? 365 : 30) * 24 * 60 * 60 * 1000);
+
 export const getSubscriptionStatusController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
     if (!userId) {
-      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
-        message: "Authentication required",
-      });
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({ message: "Authentication required" });
     }
+
     const user = await UserModel.findById(userId).select(
-      "plan subscriptionStatus subscriptionId interval trialEnd",
+      "plan subscriptionStatus subscriptionId interval currentPeriodEnd trialEnd",
     );
 
-    let trialDaysRemaining: number | null = null;
-    if (user?.trialEnd) {
-      const diff = user.trialEnd.getTime() - Date.now();
-      trialDaysRemaining = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-    }
+    const isActive = user?.subscriptionStatus === "active";
 
     return res.status(HTTPSTATUS.OK).json({
       plan: user?.plan ?? "free",
       subscriptionStatus: user?.subscriptionStatus ?? null,
-      interval: user?.interval ?? "monthly",
-      trialDaysRemaining,
-      currentPeriodEnd: user?.subscriptionId
-        ? new Date(
-            Date.now() +
-              (user.interval === "yearly" ? 365 : 30) * 24 * 60 * 60 * 1000,
-          ).toISOString()
-        : null,
+      interval: isActive ? (user?.interval ?? "monthly") : null,
+      trialDaysRemaining: null,
+      currentPeriodEnd: user?.currentPeriodEnd?.toISOString() ?? null,
     });
   },
 );
@@ -40,10 +33,9 @@ export const confirmUpgradeController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
     if (!userId) {
-      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
-        message: "Authentication required",
-      });
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({ message: "Authentication required" });
     }
+
     const interval: "monthly" | "yearly" =
       req.body.interval === "yearly" ? "yearly" : "monthly";
 
@@ -52,6 +44,7 @@ export const confirmUpgradeController = asyncHandler(
       subscriptionStatus: "active",
       subscriptionId: `sub_fake_${Date.now()}`,
       interval,
+      currentPeriodEnd: periodEndDate(interval),
       trialEnd: null,
     });
 
@@ -65,22 +58,23 @@ export const switchIntervalController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
     if (!userId) {
-      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
-        message: "Authentication required",
-      });
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({ message: "Authentication required" });
     }
-    const user = await UserModel.findById(userId).select(
-      "plan subscriptionStatus",
-    );
+
+    const user = await UserModel.findById(userId).select("plan subscriptionStatus");
     if (user?.plan !== "pro" || user?.subscriptionStatus !== "active") {
       return res.status(HTTPSTATUS.FORBIDDEN).json({
         message: "Only active Pro subscribers can switch billing intervals",
       });
     }
+
     const interval: "monthly" | "yearly" =
       req.body.interval === "yearly" ? "yearly" : "monthly";
 
-    await UserModel.findByIdAndUpdate(userId, { interval });
+    await UserModel.findByIdAndUpdate(userId, {
+      interval,
+      currentPeriodEnd: periodEndDate(interval),
+    });
 
     return res.status(HTTPSTATUS.OK).json({
       message: `Successfully switched to the ${interval.toUpperCase()} plan.`,
@@ -92,19 +86,15 @@ export const cancelSubscriptionController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
     if (!userId) {
-      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
-        message: "Authentication required",
-      });
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({ message: "Authentication required" });
     }
+
     await UserModel.findByIdAndUpdate(userId, {
       plan: "free",
       subscriptionStatus: "canceled",
       subscriptionId: null,
-      interval: "monthly",
     });
 
-    return res.status(HTTPSTATUS.OK).json({
-      message: "Subscription canceled",
-    });
+    return res.status(HTTPSTATUS.OK).json({ message: "Subscription canceled" });
   },
 );
