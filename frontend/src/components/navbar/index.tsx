@@ -39,11 +39,11 @@ const Navbar = () => {
     <>
       <header
         className={cn(
-          "w-full px-4 py-3 pb-3 lg:px-14 bg-[var(--secondary-dark-color)] text-white ",
+          "w-full bg-[var(--secondary-dark-color)] text-white scrollbar-hide",
           pathname === PROTECTED_ROUTES.OVERVIEW && "!pb-3",
         )}
       >
-        <div className="w-full flex h-14 max-w-[var(--max-width)] items-center mx-auto">
+        <div className="w-full h-14 px-4 md:px-6 lg:px-8 flex items-center">
           <div className="w-full flex items-center justify-between">
             {/* Left side - Logo */}
             <div className="flex items-center gap-4">
@@ -77,9 +77,7 @@ const Navbar = () => {
                   )}
                   asChild
                 >
-                  <NavLink to={route.href}>
-                    {route.label}
-                  </NavLink>
+                  <NavLink to={route.href}>{route.label}</NavLink>
                 </Button>
               ))}
             </nav>
@@ -102,9 +100,7 @@ const Navbar = () => {
                       )}
                       asChild
                     >
-                      <NavLink to={route.href}>
-                        {route.label}
-                      </NavLink>
+                      <NavLink to={route.href}>{route.label}</NavLink>
                     </Button>
                   ))}
                 </nav>

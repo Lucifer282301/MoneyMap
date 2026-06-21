@@ -13,6 +13,16 @@ html.dark,
   background-color: #1a1e2a;
 }
 
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

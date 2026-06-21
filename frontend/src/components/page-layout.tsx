@@ -25,7 +25,7 @@ const PageLayout = ({
   renderPageHeader,
 }: PropsType) => {
   return (
-    <div>
+    <div className="w-full">
       {showHeader && (
         <PageHeader
           title={title}
@@ -36,7 +36,7 @@ const PageLayout = ({
       )}
       <div
         className={cn(
-          "w-full max-w-(--max-width) mx-auto pt-8",
+          "w-full px-4 md:px-6 lg:px-8 pt-8 scrollbar-hide",
           addMarginTop && "-mt-20",
           className,
         )}
