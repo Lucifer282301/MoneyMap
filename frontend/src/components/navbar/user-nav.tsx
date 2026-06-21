@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useGetSubscriptionStatusQuery } from "@/features/billing/billingAPI";
+import { getDaysRemaining, isProUser } from "@/lib/billing-verify-plan";
 
 export const UserNav = ({
   userName,
@@ -23,16 +24,9 @@ export const UserNav = ({
 }) => {
   const { data: subscription } = useGetSubscriptionStatusQuery();
 
-  const isPro =
-    subscription?.plan === "pro" &&
-    subscription?.subscriptionStatus === "active";
+  const isPro = isProUser(subscription);
 
-  const daysLeft = subscription?.currentPeriodEnd
-    ? Math.ceil(
-        (new Date(subscription.currentPeriodEnd).getTime() - Date.now()) /
-          (1000 * 60 * 60 * 24),
-      )
-    : null;
+  const daysLeft = getDaysRemaining(subscription?.currentPeriodEnd);
 
   const planLabel = isPro
     ? daysLeft !== null && daysLeft <= 5

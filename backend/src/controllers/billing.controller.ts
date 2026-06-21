@@ -6,6 +6,11 @@ import UserModel from "../models/user.model";
 export const getSubscriptionStatusController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
+    if (!userId) {
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
+        message: "Authentication required",
+      });
+    }
     const user = await UserModel.findById(userId).select(
       "plan subscriptionStatus subscriptionId interval trialEnd",
     );
@@ -34,6 +39,11 @@ export const getSubscriptionStatusController = asyncHandler(
 export const confirmUpgradeController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
+    if (!userId) {
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
+        message: "Authentication required",
+      });
+    }
     const interval: "monthly" | "yearly" =
       req.body.interval === "yearly" ? "yearly" : "monthly";
 
@@ -42,6 +52,7 @@ export const confirmUpgradeController = asyncHandler(
       subscriptionStatus: "active",
       subscriptionId: `sub_fake_${Date.now()}`,
       interval,
+      trialEnd: null,
     });
 
     return res.status(HTTPSTATUS.OK).json({
@@ -53,6 +64,19 @@ export const confirmUpgradeController = asyncHandler(
 export const switchIntervalController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
+    if (!userId) {
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
+        message: "Authentication required",
+      });
+    }
+    const user = await UserModel.findById(userId).select(
+      "plan subscriptionStatus",
+    );
+    if (user?.plan !== "pro" || user?.subscriptionStatus !== "active") {
+      return res.status(HTTPSTATUS.FORBIDDEN).json({
+        message: "Only active Pro subscribers can switch billing intervals",
+      });
+    }
     const interval: "monthly" | "yearly" =
       req.body.interval === "yearly" ? "yearly" : "monthly";
 
@@ -67,7 +91,11 @@ export const switchIntervalController = asyncHandler(
 export const cancelSubscriptionController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;
-
+    if (!userId) {
+      return res.status(HTTPSTATUS.UNAUTHORIZED).json({
+        message: "Authentication required",
+      });
+    }
     await UserModel.findByIdAndUpdate(userId, {
       plan: "free",
       subscriptionStatus: "canceled",

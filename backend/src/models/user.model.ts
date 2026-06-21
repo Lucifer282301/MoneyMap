@@ -6,10 +6,10 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   profilePicture: string | null;
-  subscriptionId?: string;
+  subscriptionId?: string | null;
   plan: "free" | "pro";
   subscriptionStatus?: string;
-  interval?: "monthly" | "yearly";
+  interval: "monthly" | "yearly";
   trialEnd?: Date;
   createdAt: Date;
   updatedAt: Date;

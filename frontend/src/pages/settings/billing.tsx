@@ -133,8 +133,8 @@ const Billing = () => {
             </div>
           )}
 
-          {/* Trial expired banner — no active pro plan */}
-          {!isPro && (
+          {/* Trial expired banner — had a subscription but no longer active */}
+          {!isPro && subscription?.subscriptionStatus !== null && (
             <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
               <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
               <div>
@@ -191,7 +191,7 @@ const Billing = () => {
                   checked={isYearly}
                   onCheckedChange={handleToggle}
                   disabled={isSwitching}
-                  className="cursor-pointer!"
+                  className="!cursor-pointer"
                 />
                 <span className="text-sm text-muted-foreground">Yearly</span>
                 {isYearly && (
@@ -213,7 +213,7 @@ const Billing = () => {
             {isPro ? (
               hasPendingSwitch ? (
                 <Button
-                  className="w-full cursor-pointer! text-white!"
+                  className="w-full !cursor-pointer !text-white"
                   disabled={isSwitching}
                   onClick={handleSwitch}
                 >
@@ -225,7 +225,7 @@ const Billing = () => {
               ) : (
                 <Button
                   variant="outline"
-                  className="w-full cursor-pointer!"
+                  className="w-full !cursor-pointer"
                   onClick={() => setCancelOpen(true)}
                 >
                   Manage Subscription
@@ -233,7 +233,7 @@ const Billing = () => {
               )
             ) : (
               <Button
-                className="w-full cursor-pointer! text-white!"
+                className="w-full !cursor-pointer !text-white"
                 onClick={() => setCheckoutOpen(true)}
               >
                 Upgrade to Pro

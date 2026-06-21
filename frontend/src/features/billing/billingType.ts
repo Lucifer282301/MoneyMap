@@ -1,8 +1,14 @@
+export type SubscriptionStatusValue =
+  | "active"
+  | "cancelled"
+  | "trialing"
+  | "past_due"
+  | null;
+
 export interface SubscriptionStatus {
   plan: "free" | "pro";
-  subscriptionStatus: string | null;
+  subscriptionStatus: SubscriptionStatusValue;
   interval: "monthly" | "yearly" | null;
-  trialDaysRemaining: number | null;
   currentPeriodEnd: string | null;
 }
 
