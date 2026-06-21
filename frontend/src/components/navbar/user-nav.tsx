@@ -10,6 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useGetSubscriptionStatusQuery } from "@/features/billing/billingAPI";
+import { getDaysRemaining, isProUser } from "@/lib/billing-verify-plan";
 
 export const UserNav = ({
   userName,
@@ -20,6 +22,18 @@ export const UserNav = ({
   profilePicture: string;
   onLogout: () => void;
 }) => {
+  const { data: subscription } = useGetSubscriptionStatusQuery();
+
+  const isPro = isProUser(subscription);
+
+  const daysLeft = getDaysRemaining(subscription?.currentPeriodEnd);
+
+  const planLabel = isPro
+    ? daysLeft !== null && daysLeft <= 5
+      ? `Pro Plan (${daysLeft} day${daysLeft !== 1 ? "s" : ""} left)`
+      : "Pro Plan"
+    : "Free Trial";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -52,7 +66,7 @@ export const UserNav = ({
         <DropdownMenuLabel className="flex flex-col items-start gap-1">
           <span className="font-semibold">{userName}</span>
           <span className="text-[13px] text-gray-400 font-light">
-            Free Trial (2 days left)
+            {planLabel}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="!bg-gray-700" />

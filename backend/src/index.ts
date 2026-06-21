@@ -9,13 +9,14 @@ import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { BadRequestException } from "./utils/app-error";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import connectDatabase from "./config/database.config";
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./routes/auth.routes";
 import { passportAuthenticateJwt } from "./config/passport.config";
-import userRoutes from "./routes/user.route";
-import transactionRoutes from "./routes/transaction.route";
+import userRoutes from "./routes/user.routes";
+import transactionRoutes from "./routes/transaction.routes";
 import { initializeCrons } from "./crons";
 import reportRoutes from "./routes/report.routes";
-import analyticsRoutes from "./routes/analytics.route";
+import analyticsRoutes from "./routes/analytics.routes";
+import billingRoutes from "./routes/billing.routes";
 
 const app = express();
 const BASE_PATH = ENV.BASE_PATH;
@@ -47,6 +48,7 @@ app.use(`${BASE_PATH}/user`, passportAuthenticateJwt, userRoutes);
 app.use(`${BASE_PATH}/transaction`, passportAuthenticateJwt, transactionRoutes);
 app.use(`${BASE_PATH}/report`, passportAuthenticateJwt, reportRoutes);
 app.use(`${BASE_PATH}/analytics`, passportAuthenticateJwt, analyticsRoutes);
+app.use(`${BASE_PATH}/billing`, passportAuthenticateJwt, billingRoutes);
 
 app.use(errorHandler);
 
