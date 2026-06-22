@@ -15,16 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js (Adjust version as needed)
+      # 2. Set up Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm" # Use 'yarn' if you use yarn.lock
+          # cache: "npm" # Kept commented out since there is no lock file
 
-      # 3. Install dependencies
+      # 3. Install dependencies (Switched from npm ci to npm install)
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       # 4. Run your linter (if applicable)
       - name: Run Lint

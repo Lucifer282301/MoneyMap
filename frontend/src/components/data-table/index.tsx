@@ -138,8 +138,8 @@ export const DataTable = <TData,>({
   return (
     <div className="w-full">
       {/* Top Bar: Search & Filters */}
-      <div className="flex flex-wrap justify-between items-center gap-2 pb-4">
-        <div className="flex items-center gap-2 flex-wrap flex-1">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-4">
+        <div className="flex flex-wrap items-center gap-2 w-full md:flex-1">
           {showSearch && (
             <Input
               placeholder={searchPlaceholder}
@@ -202,13 +202,19 @@ export const DataTable = <TData,>({
       </div>
 
       {/* Table */}
-      <div className={cn("rounded-md border overflow-x-auto", className)}>
+      <div
+        className={cn(
+          "w-full rounded-md border overflow-x-auto overflow-y-visible",
+          className,
+        )}
+      >
         {isLoading ? (
           <TableSkeleton columns={6} rows={20} />
         ) : (
           <Table
             className={cn(
-              table.getRowModel().rows.length === 0 ? "h-[200px]" : "",
+              "w-full",
+              table.getRowModel().rows.length === 0 && "h-[200px]",
             )}
           >
             <TableHeader className="sticky top-0 bg-muted z-10 ">
@@ -217,7 +223,7 @@ export const DataTable = <TData,>({
                   {group.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="!font-medium !text-[13px]"
+                      className="max-w-[150px] truncate !font-medium !text-[13px]"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -236,7 +242,10 @@ export const DataTable = <TData,>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="!text-[13.3px]">
+                      <TableCell
+                        key={cell.id}
+                        className="max-w-[150px] truncate !text-[13.3px]"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),

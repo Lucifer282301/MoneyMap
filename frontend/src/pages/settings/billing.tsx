@@ -231,17 +231,19 @@ const Billing = () => {
           {/* Plan card */}
           <div className="rounded-xl border bg-card p-6 space-y-6">
             {/* Header: title + price on left, toggle on right */}
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="font-semibold text-base">Pro Plan</p>
                 <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-4xl font-bold">{price}</span>
+                  <span className="text-3xl sm:text-4xl font-bold">
+                    {price}
+                  </span>
                   <span className="text-sm text-muted-foreground">
                     /{period}
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0 mt-1">
+              <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:mt-1">
                 <span className="text-sm text-muted-foreground">Monthly</span>
                 <Switch
                   checked={isYearly}
@@ -252,7 +254,7 @@ const Billing = () => {
                 <span className="text-sm text-muted-foreground">Yearly</span>
                 {isYearly && (
                   <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                    Save {savingsPercentage ?? 17}%
+                    Save {savingsPct}%
                   </span>
                 )}
               </div>

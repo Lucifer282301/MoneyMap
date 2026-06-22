@@ -18,7 +18,7 @@ const Transactions = () => {
       }
     >
       <Card className="border-0 shadow-none">
-        <CardContent className="pt-2">
+        <CardContent className="pt-2 px-2 sm:px-6">
           <TransactionTable pageSize={20} />
         </CardContent>
       </Card>

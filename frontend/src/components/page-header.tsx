@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
   title?: string;
@@ -14,10 +15,15 @@ const PageHeader = ({
   renderPageHeader,
 }: PageHeaderProps) => {
   return (
-    <div className="w-full pb-20 pt-4 px-5 lg:px-0 bg-[#1a1e2a] text-white scrollbar-hide">
+    <div
+      className={cn(
+        "sticky top-14 z-40 w-full pt-4 px-5 lg:px-0 bg-[var(--secondary-dark-color)] text-white",
+        renderPageHeader ? "pb-8" : "pb-4",
+      )}
+    >
       <div className="w-full px-4 md:px-6 lg:px-8">
         {renderPageHeader ? (
-          <>{renderPageHeader}</>
+          renderPageHeader
         ) : (
           <div className="w-full flex flex-col gap-3 items-start justify-start lg:items-center lg:flex-row lg:justify-between">
             {(title || subtitle) && (

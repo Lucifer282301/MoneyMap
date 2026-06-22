@@ -36,7 +36,7 @@ const getCardStatus = (
     if (value === 0) {
       return {
         label: "No Savings Record",
-        color: "text-gray-400",
+        color: "text-muted-foreground",
         Icon: TrendingDownIcon,
       };
     }
@@ -96,7 +96,7 @@ const getCardStatus = (
 
     return {
       label: `No ${typeLabel}`,
-      color: "text-gray-400",
+      color: "text-muted-foreground",
       Icon: TrendingDownIcon,
       description: "",
     };
@@ -150,15 +150,15 @@ const SummaryCard = ({
 
   if (isLoading) {
     return (
-      <Card className="!border-none !border-0 !gap-0 !bg-white/5">
+      <Card className="!border-none !gap-0 bg-white dark:bg-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 !pb-5">
-          <Skeleton className="h-4 w-24 bg-white/30" />
+          <Skeleton className="h-4 w-24 bg-muted dark:bg-white/30" />
         </CardHeader>
         <CardContent className="space-y-8">
-          <Skeleton className="h-10.5 w-full bg-white/30" />
+          <Skeleton className="h-10.5 w-full bg-muted dark:bg-white/30" />
           <div className="flex items-center gap-2">
-            <Skeleton className="h-3 w-12 bg-white/30" />
-            <Skeleton className="h-3 w-16 bg-white/30" />
+            <Skeleton className="h-3 w-12 bg-muted dark:bg-white/30" />
+            <Skeleton className="h-3 w-16 bg-muted dark:bg-white/30" />
           </div>
         </CardContent>
       </Card>
@@ -175,9 +175,9 @@ const SummaryCard = ({
   };
 
   return (
-    <Card className="!border-none !border-0 !gap-0 !bg-white/5">
+    <Card className="!border-none !border-0 !gap-0 bg-white dark:bg-white/5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 !pb-5">
-        <CardTitle className="text-[15px] text-gray-300 font-medium">
+        <CardTitle className="text-[15px] text-muted-foreground font-medium">
           {title}
         </CardTitle>
       </CardHeader>
@@ -185,7 +185,9 @@ const SummaryCard = ({
         <div
           className={cn(
             "text-4xl font-bold",
-            cardType === "balance" && value < 0 ? "text-red-400" : "text-white",
+            cardType === "balance" && value < 0
+              ? "text-red-500 dark:text-red-400"
+              : "text-foreground",
           )}
         >
           <CountUp
@@ -205,22 +207,28 @@ const SummaryCard = ({
                 {status.label} {value !== 0 && `(${formatPercentage(value)})`}
               </span>
               {status.description && (
-                <span className="text-gray-400 ml-1">
+                <span className="text-muted-foreground ml-1">
                   • {status.description}
                 </span>
               )}
             </div>
           ) : dateRange?.value === DateRangeEnum.ALL_TIME ? (
-            <span className="text-gray-400">Showing {dateRange?.label}</span>
+            <span className="text-muted-foreground">
+              Showing {dateRange?.label}
+            </span>
           ) : value === 0 || status.label ? (
             <div className="flex items-center gap-1.5">
               <status.Icon className={cn("size-3.5", status.color)} />
               <span className={status.color}>{status.label}</span>
               {status.description && (
-                <span className="text-gray-400">• {status.description}</span>
+                <span className="text-muted-foreground">
+                  • {status.description}
+                </span>
               )}
               {!status.description && (
-                <span className="text-gray-400">• {dateRange?.label}</span>
+                <span className="text-muted-foreground">
+                  • {dateRange?.label}
+                </span>
               )}
             </div>
           ) : showTrend ? (
@@ -249,7 +257,7 @@ const SummaryCard = ({
                 </div>
               )}
               {percentageChange === 0 && (
-                <div className="flex items-center gap-0.5 text-gray-400">
+                <div className="flex items-center gap-0.5 text-muted-foreground">
                   <TrendingDownIcon className="size-3" />
                   <span>
                     {formatPercentage(0, {
@@ -259,7 +267,9 @@ const SummaryCard = ({
                   </span>
                 </div>
               )}
-              <span className="text-gray-400">• {dateRange?.label}</span>
+              <span className="text-muted-foreground">
+                • {dateRange?.label}
+              </span>
             </div>
           ) : null}
         </div>
