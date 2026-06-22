@@ -25,16 +25,20 @@ jobs:
 
       # 3. Install dependencies
       - name: Install dependencies
-        run: npm ci
+        working-directory: frontend
+        run: npm install
 
       # 4. Run your linter (if applicable)
       - name: Run Lint
+        working-directory: frontend
         run: npm run lint --if-present
 
       # 5. Run tests (if applicable)
       - name: Run Tests
+        working-directory: frontend
         run: npm test --if-present
 
       # 6. Verify the app builds successfully
       - name: Build Project
+        working-directory: frontend
         run: npm run build --if-present
