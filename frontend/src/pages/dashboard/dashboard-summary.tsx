@@ -1,6 +1,5 @@
 import { useTypedSelector } from "@/app/hook";
 import DashboardHeader from "./_component/dashboard-header";
-import DashboardStats from "./_component/dashboard-stats";
 import { DateRangeType } from "@/components/date-range-select";
 
 const DashboardSummary = ({
@@ -12,15 +11,12 @@ const DashboardSummary = ({
 }) => {
   const { user } = useTypedSelector((state) => state.auth);
   return (
-    <div className="w-full space-y-6 scrollbar-hide">
-      <DashboardHeader
-        title={`Welcome back, ${user?.name || "Unknown"}`}
-        subtitle="This is your overview report for the selected period"
-        dateRange={dateRange}
-        setDateRange={setDateRange}
-      />
-      <DashboardStats dateRange={dateRange} />
-    </div>
+    <DashboardHeader
+      title={`Welcome back, ${user?.name || "Unknown"}`}
+      subtitle="This is your overview report for the selected period"
+      dateRange={dateRange}
+      setDateRange={setDateRange}
+    />
   );
 };
 
