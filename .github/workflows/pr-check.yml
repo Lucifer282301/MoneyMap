@@ -1,9 +1,10 @@
 name: Front - PR Check
 
-# This triggers the workflow whenever a PR is opened or updated
 on:
   pull_request:
-    branches: ["master", "main"] # Adjust to match your base branch
+    branches:
+      - master
+      - main
 
 jobs:
   build-and-test:
@@ -11,34 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out the repository code
+      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js (Adjust version as needed)
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      # 3. Install dependencies
+      # Install dependencies
       - name: Install dependencies
         working-directory: frontend
         run: npm install
 
-      # 4. Run your linter (if applicable)
+      # Run ESLint
       - name: Run Lint
         working-directory: frontend
         run: npm run lint --if-present
 
-      # 5. Run tests (if applicable)
+      # Run tests
       - name: Run Tests
         working-directory: frontend
         run: npm test --if-present
 
-      # 6. Verify the app builds successfully
+      # Build application
       - name: Build Project
         working-directory: frontend
         run: npm run build --if-present

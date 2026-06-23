@@ -1,41 +1,52 @@
-name: "CodeQL"
+name: CodeQL
 
 on:
   push:
-    branches: ["master", "main"]
+    branches:
+      - master
+      - main
+
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: ["master", "main"]
+    branches:
+      - master
+      - main
+
   schedule:
-    - cron: "30 1 * * 0" # Runs a scheduled scan once a week
+    - cron: "30 1 * * 0"
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
 
 jobs:
   analyze:
-    name: Analyze
+    name: Analyze (javascript-typescript)
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
 
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript"]
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+        language:
+          - javascript-typescript
 
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Initializes the CodeQL tools for scanning.
+      # Initialize CodeQL
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
-      # Perform the actual security analysis
+      # Enable automatic build detection
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      # Run CodeQL analysis
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:${{ matrix.language }}"
