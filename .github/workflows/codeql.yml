@@ -21,13 +21,14 @@ permissions:
 
 jobs:
   analyze:
-    name: Analyze (javascript-typescript)
+    name: Analyze
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript-typescript']
+        language:
+          - javascript-typescript
 
     steps:
       - name: Checkout repository
