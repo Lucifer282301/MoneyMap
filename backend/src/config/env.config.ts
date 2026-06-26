@@ -24,8 +24,6 @@ const envConfig = () => ({
   RESEND_FROM: getEnv("RESEND_FROM", ""),
 
   FRONTEND_ORIGIN: getEnv("FRONTEND_ORIGIN", "localhost"),
-
-  ENABLE_CRONS: getEnv("ENABLE_CRONS", "enable_crons"),
 });
 
 export const ENV = envConfig();
