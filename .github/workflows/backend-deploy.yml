@@ -7,6 +7,12 @@ on:
     paths:
       - "backend/**"
       - ".github/workflows/backend-deploy.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-deploy.yml"
 
 permissions:
   contents: read
@@ -24,4 +30,5 @@ jobs:
         run: docker build -t moneymap-backend:latest ./backend
 
       - name: Trigger Render Deploy
+        if: github.event_name == 'push'
         run: curl -fsSL -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

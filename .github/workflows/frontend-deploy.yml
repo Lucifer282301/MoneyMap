@@ -7,6 +7,12 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-deploy.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-deploy.yml"
 
 permissions:
   contents: read
@@ -49,6 +55,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
     steps:
       - name: Deploy to GitHub Pages
