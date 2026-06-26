@@ -1,0 +1,100 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: write
+
+env:
+  CI: false
+
+concurrency:
+  group: "deploy-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build_frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build project
+        working-directory: frontend
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/dist
+          if-no-files-found: error
+
+  build_backend:
+    name: Build Backend (Docker)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t moneymap-backend:latest ./backend
+
+  deploy_backend:
+    name: Deploy Backend to Render
+    runs-on: ubuntu-latest
+    needs: [build_frontend, build_backend]
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Trigger Render Deploy
+        run: curl -fsSL -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+  deploy_frontend:
+    name: Deploy Frontend to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build_frontend, deploy_backend]
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: gh-pages
+          force_orphan: true
