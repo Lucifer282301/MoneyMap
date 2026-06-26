@@ -1,5 +1,8 @@
 import { HTTPSTATUS, HttpStatusCodeType } from "../config/http.config";
-import { ErrorCodeEnum, ErrorCodeEnumType } from "../enums/error-code.enum";
+import {
+  ErrorCodeEnum,
+  ErrorCodeEnumType,
+} from "../shared/enums/error-code.enum";
 
 export class AppError extends Error {
   public statusCode: HttpStatusCodeType;
@@ -21,7 +24,7 @@ export class HttpException extends AppError {
   constructor(
     message = "Http Exception Error",
     statusCode: HttpStatusCodeType,
-    errorCode?: ErrorCodeEnumType
+    errorCode?: ErrorCodeEnumType,
   ) {
     super(message, statusCode, errorCode);
   }

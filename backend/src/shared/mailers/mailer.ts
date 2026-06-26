@@ -1,5 +1,5 @@
-import { ENV } from "../config/env.config";
-import { resend } from "../config/resend.config";
+import { ENV } from "../../config/env.config";
+import { resend } from "../../config/resend.config";
 
 type Params = {
   to: string | string[];
@@ -9,7 +9,7 @@ type Params = {
   from?: string;
 };
 
-const mailer_sender = `MoneyMap <${ENV.RESEND_MAILER_SENDER}>`;
+const mailer_sender = `${ENV.RESEND_FROM_NAME} <${ENV.RESEND_FROM}>`;
 
 export const sendEmail = async ({
   to,

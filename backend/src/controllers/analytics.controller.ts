@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { HTTPSTATUS } from "../config/http.config";
-import { DateRangePreset } from "../enums/date-range.enum";
+import { DateRangePreset } from "../shared/enums/date-range.enum";
 import {
   chartAnalyticsService,
   expensePieChartBreakdownService,

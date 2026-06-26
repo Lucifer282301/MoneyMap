@@ -35,6 +35,7 @@ export interface TransactionDocument extends Document {
   amount: number;
   category: string;
   receiptUrl?: string;
+  receiptPublicId?: string;
   recurringInterval?: keyof typeof RecurringIntervalEnum;
   nextRecurringDate?: Date;
   lastProcessed?: Date;
@@ -77,6 +78,9 @@ const transactionSchema = new Schema<TransactionDocument>(
       required: true,
     },
     receiptUrl: {
+      type: String,
+    },
+    receiptPublicId: {
       type: String,
     },
     date: {

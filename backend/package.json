@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "type": "commonjs",
   "scripts": {
-    "dev": "ts-node-dev --files src/index.ts",
-    "build": "tsc && cp ./package.json ./dist",
-    "start": "node dist/index.js"
+  "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,7 @@
   "dependencies": {
     "@google/genai": "^0.13.0",
     "axios": "^1.17.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -25,8 +25,7 @@
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.24.0",
-    "multer": "^1.4.5-lts.2",
-    "multer-storage-cloudinary": "^4.0.0",
+    "multer": "^2.0.0",
     "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -35,7 +34,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",

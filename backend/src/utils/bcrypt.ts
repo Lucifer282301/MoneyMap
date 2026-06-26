@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // Generate a bcrypt hash for secure storage
 export const hashValue = async (value: string, saltRounds: number = 10) =>

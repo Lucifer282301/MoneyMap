@@ -7,7 +7,7 @@ import {
   createTransactionSchema,
   transactionIdSchema,
   updateTransactionSchema,
-} from "../validators/transaction.validator";
+} from "../shared/validators/transaction.validator";
 import {
   bulkDeleteTransactionService,
   bulkTransactionService,
@@ -20,7 +20,7 @@ import {
   updateTransactionService,
 } from "../services/transaction.service";
 import { TransactionTypeEnum } from "../models/transaction.model";
-import { ErrorCodeEnum } from "../enums/error-code.enum";
+import { ErrorCodeEnum } from "../shared/enums/error-code.enum";
 
 export const createTransactionController = asyncHandler(
   async (req: Request, res: Response) => {

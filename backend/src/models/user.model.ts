@@ -6,6 +6,7 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   profilePicture: string | null;
+  profilePicturePublicId: string | null;
   subscriptionId?: string | null;
   plan: "free" | "pro";
   subscriptionStatus?: string;
@@ -33,6 +34,10 @@ const userSchema = new Schema<UserDocument>(
       lowercase: true,
     },
     profilePicture: {
+      type: String,
+      default: null,
+    },
+    profilePicturePublicId: {
       type: String,
       default: null,
     },

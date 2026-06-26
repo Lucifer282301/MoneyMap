@@ -211,7 +211,7 @@ const TransactionForm = (props: {
                   <FormLabel>Transaction Type</FormLabel>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                     className="flex space-x-2"
                     disabled={isScanning}
                   >

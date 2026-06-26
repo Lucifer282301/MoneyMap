@@ -1,0 +1,23 @@
+name: Backend - PR Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t moneymap-backend:pr-${{ github.event.pull_request.number }} ./backend

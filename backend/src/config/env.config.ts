@@ -7,10 +7,10 @@ const envConfig = () => ({
   BASE_PATH: getEnv("BASE_PATH", "/api"),
   MONGO_URI: getEnv("MONGO_URI"),
 
-  JWT_SECRET: getEnv("JWT_SECRET", "secret_jwt"),
-  JWT_EXPIRES_IN: getEnv("JWT_EXPIRES_IN", "15m") as string,
+  JWT_ACCESS_SECRET: getEnv("JWT_ACCESS_SECRET", "jwt_access_secret_key"),
+  JWT_ACCESS_EXPIRES_IN: getEnv("JWT_ACCESS_EXPIRES_IN", "15m") as string,
 
-  JWT_REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET", "secret_jwt_refresh"),
+  JWT_REFRESH_SECRET: getEnv("JWT_REFRESH_SECRET", "jwt_refresh_secret_key"),
   JWT_REFRESH_EXPIRES_IN: getEnv("JWT_REFRESH_EXPIRES_IN", "7d") as string,
 
   GEMINI_API_KEY: getEnv("GEMINI_API_KEY"),
@@ -20,9 +20,12 @@ const envConfig = () => ({
   CLOUDINARY_API_SECRET: getEnv("CLOUDINARY_API_SECRET"),
 
   RESEND_API_KEY: getEnv("RESEND_API_KEY"),
-  RESEND_MAILER_SENDER: getEnv("RESEND_MAILER_SENDER", ""),
+  RESEND_FROM_NAME: getEnv("RESEND_FROM_NAME"),
+  RESEND_FROM: getEnv("RESEND_FROM", ""),
 
   FRONTEND_ORIGIN: getEnv("FRONTEND_ORIGIN", "localhost"),
+
+  ENABLE_CRONS: getEnv("ENABLE_CRONS", "enable_crons"),
 });
 
 export const ENV = envConfig();

@@ -1,5 +1,5 @@
-import { ReportType } from "../@types/report.type";
-import { formatCurrency } from "../utils/format-currency";
+import { ReportType } from "../../@types/report.type";
+import { formatCurrency } from "../../utils/format-currency";
 import { sendEmail } from "./mailer";
 import { getReportEmailTemplate } from "./templates/report.template";
 

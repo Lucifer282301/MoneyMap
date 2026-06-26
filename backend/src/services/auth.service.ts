@@ -4,7 +4,7 @@ import { NotFoundException, UnauthorizedException } from "../utils/app-error";
 import {
   LoginSchemaType,
   RegisterSchemaType,
-} from "../validators/auth.validator";
+} from "../shared/validators/auth.validator";
 import ReportSettingModel, {
   ReportFrequencyEnum,
 } from "../models/report-setting.model";

@@ -10,7 +10,7 @@ import authRoutes from "./routes/auth.routes";
 import { passportAuthenticateJwt } from "./config/passport.config";
 import userRoutes from "./routes/user.routes";
 import transactionRoutes from "./routes/transaction.routes";
-import { initializeCrons } from "./crons";
+import { initializeCrons } from "./shared/crons";
 import reportRoutes from "./routes/report.routes";
 import analyticsRoutes from "./routes/analytics.routes";
 import billingRoutes from "./routes/billing.routes";
@@ -42,7 +42,7 @@ app.use(errorHandler);
 app.listen(ENV.PORT, async () => {
   await connectDatabase();
 
-  if (ENV.NODE_ENV === "development") {
+  if (ENV.NODE_ENV === "development" || ENV.ENABLE_CRONS === "true") {
     await initializeCrons();
   }
 

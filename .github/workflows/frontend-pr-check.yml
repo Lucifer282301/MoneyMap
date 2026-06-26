@@ -1,9 +1,11 @@
-name: Front - PR Check
+name: Frontend - PR Check
 
 on:
   pull_request:
     branches:
       - main
+    paths:
+      - "frontend/**"
 
 permissions:
   contents: read

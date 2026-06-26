@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { HTTPSTATUS } from "../config/http.config";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
-import { loginSchema, registerSchema } from "../validators/auth.validator";
+import {
+  loginSchema,
+  registerSchema,
+} from "../shared/validators/auth.validator";
 import { loginService, registerService } from "../services/auth.service";
 
 export const registerController = asyncHandler(

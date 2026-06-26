@@ -2,7 +2,7 @@ import { z, ZodError } from "zod";
 import { ErrorRequestHandler, Response } from "express";
 import { HTTPSTATUS } from "../config/http.config";
 import { AppError } from "../utils/app-error";
-import { ErrorCodeEnum } from "../enums/error-code.enum";
+import { ErrorCodeEnum } from "../shared/enums/error-code.enum";
 import { MulterError } from "multer";
 
 const formatZodError = (res: Response, error: z.ZodError) => {
