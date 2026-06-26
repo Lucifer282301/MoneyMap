@@ -6,7 +6,7 @@ import {
   getAllReportsService,
   updateReportSettingService,
 } from "../services/report.service";
-import { updateReportSettingSchema } from "../validators/report.validator";
+import { updateReportSettingSchema } from "../shared/validators/report.validator";
 
 export const getAllReportsController = asyncHandler(
   async (req: Request, res: Response) => {

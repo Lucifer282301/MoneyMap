@@ -1,6 +1,6 @@
-import { ReportType } from "../../@types/report.type";
-import { formatCurrency } from "../../utils/format-currency";
-import { capitalizeFirstLetter } from "../../utils/helper";
+import { ReportType } from "../../../@types/report.type";
+import { formatCurrency } from "../../../utils/format-currency";
+import { capitalizeFirstLetter } from "../../../utils/helper";
 
 export const getReportEmailTemplate = (
   reportData: ReportType & { username: string },

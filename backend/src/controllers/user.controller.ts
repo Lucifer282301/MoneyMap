@@ -5,7 +5,7 @@ import {
   updateUserService,
 } from "../services/user.service";
 import { HTTPSTATUS } from "../config/http.config";
-import { updateUserSchema } from "../validators/user.validator";
+import { updateUserSchema } from "../shared/validators/user.validator";
 
 export const getCurrentUserController = asyncHandler(
   async (req: Request, res: Response) => {

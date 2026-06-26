@@ -3,7 +3,7 @@ import {
   PaymentMethodEnum,
   RecurringIntervalEnum,
   TransactionTypeEnum,
-} from "../models/transaction.model";
+} from "../../models/transaction.model";
 
 export const transactionIdSchema = z.string().trim().min(1);
 

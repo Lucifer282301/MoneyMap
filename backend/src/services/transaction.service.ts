@@ -7,10 +7,11 @@ import { calculateNextOccurrence } from "../utils/helper";
 import {
   CreateTransactionType,
   UpdateTransactionType,
-} from "../validators/transaction.validator";
+} from "../shared/validators/transaction.validator";
 import { genAI, genAIModel } from "../config/google-ai.config";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { receiptPrompt } from "../utils/prompt";
+import { uploadToCloudinary } from "../utils/cloudinary-upload";
 
 export const createTransactionService = async (
   body: CreateTransactionType,
@@ -270,14 +271,9 @@ export const scanReceiptService = async (
     throw new BadRequestException("No file uploaded");
   }
 
-  if (!file.path) {
-    throw new BadRequestException("Failed to upload file");
-  }
+  const uploadedReceipt = await uploadToCloudinary(file.buffer, "receipts");
 
-  const responseData = await axios.get(file.path, {
-    responseType: "arraybuffer",
-  });
-  const base64String = Buffer.from(responseData.data).toString("base64");
+  const base64String = file.buffer.toString("base64");
 
   if (!base64String) {
     throw new BadRequestException("Could not process file");
@@ -319,6 +315,7 @@ export const scanReceiptService = async (
     category: data.category,
     paymentMethod: data.paymentMethod,
     type: data.type,
-    receiptUrl: file.path,
+    receiptUrl: uploadedReceipt.secure_url,
+    receiptPublicId: uploadedReceipt.public_id,
   };
 };

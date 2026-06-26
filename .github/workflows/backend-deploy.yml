@@ -3,9 +3,9 @@ name: Backend - Deploy to Render
 on:
   push:
     branches:
-      - main
+      - prod
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 permissions:
   contents: read

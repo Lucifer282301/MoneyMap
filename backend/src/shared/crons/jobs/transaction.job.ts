@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import TransactionModel from "../../models/transaction.model";
-import { calculateNextOccurrence } from "../../utils/helper";
+import TransactionModel from "../../../models/transaction.model";
+import { calculateNextOccurrence } from "../../../utils/helper";
 
 export const processRecurringTransactions = async () => {
   const now = new Date();

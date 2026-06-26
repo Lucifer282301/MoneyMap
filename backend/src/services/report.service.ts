@@ -6,7 +6,7 @@ import TransactionModel, {
 } from "../models/transaction.model";
 import { NotFoundException } from "../utils/app-error";
 import { calculateNextReportDate } from "../utils/helper";
-import { UpdateReportSettingType } from "../validators/report.validator";
+import { UpdateReportSettingType } from "../shared/validators/report.validator";
 import { convertToDollarUnit } from "../utils/format-currency";
 import { format } from "date-fns";
 import { genAI, genAIModel } from "../config/google-ai.config";

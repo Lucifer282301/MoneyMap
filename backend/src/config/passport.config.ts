@@ -13,7 +13,7 @@ interface JwtPayload {
 
 const options: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: ENV.JWT_SECRET,
+  secretOrKey: ENV.JWT_ACCESS_SECRET,
   audience: ["user"],
   algorithms: ["HS256"],
 };
