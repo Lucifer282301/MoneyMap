@@ -42,8 +42,8 @@ app.use(errorHandler);
 app.listen(ENV.PORT, async () => {
   await connectDatabase();
 
-  if (ENV.NODE_ENV === "development") {
-    await initializeCrons();
+  if (ENV.NODE_ENV === "development" || ENV.ENABLE_CRONS === "true") {
+  await initializeCrons();
   }
 
   console.log(`Server is running on port ${ENV.PORT} in ${ENV.NODE_ENV} mode`);

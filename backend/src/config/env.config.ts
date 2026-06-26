@@ -23,6 +23,8 @@ const envConfig = () => ({
   RESEND_MAILER_SENDER: getEnv("RESEND_MAILER_SENDER", ""),
 
   FRONTEND_ORIGIN: getEnv("FRONTEND_ORIGIN", "localhost"),
+
+  ENABLE_CRONS: getEnv("ENABLE_CRONS", "enable_crons"),
 });
 
 export const ENV = envConfig();
