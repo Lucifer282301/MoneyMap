@@ -3,7 +3,7 @@ name: Backend - Deploy to Render
 on:
   push:
     branches:
-      - prod
+      - main
     paths:
       - "backend/**"
 
