@@ -9,7 +9,7 @@ import useAuthExpiration from "@/hooks/use-auth-expiration";
 const AppRoutes = () => {
   useAuthExpiration();
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         {/* AUthentication Route  */}
         <Route path="/" element={<AuthRoute />}>
