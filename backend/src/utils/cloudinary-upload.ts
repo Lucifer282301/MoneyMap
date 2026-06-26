@@ -1,3 +1,4 @@
+import { UploadApiResponse } from "cloudinary";
 import { cloudinary } from "../config/cloudinary.config";
 
 export const uploadToCloudinary = (

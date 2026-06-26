@@ -18,8 +18,8 @@ const defaults: SignOptions = {
 };
 
 const accessTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: ENV.JWT_EXPIRES_IN as TimeString,
-  secret: ENV.JWT_SECRET,
+  expiresIn: ENV.JWT_ACCESS_EXPIRES_IN as TimeString,
+  secret: ENV.JWT_ACCESS_SECRET,
 };
 
 export const signJwtToken = (
