@@ -84,6 +84,10 @@ jobs:
     needs: [build_frontend, deploy_backend]
     if: github.event_name == 'push'
 
+    environment:
+      name: github-pages
+      url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
