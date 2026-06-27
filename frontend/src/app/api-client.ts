@@ -6,7 +6,19 @@ const DEFAULT_API_BASE_URL = "https://mern-ai-moneymap-app.onrender.com/api";
 const getApiBaseUrl = () => {
   const configuredUrl = import.meta.env.VITE_API_URL?.trim();
 
-  if (!configuredUrl || configuredUrl.includes("github.io")) {
+  if (!configuredUrl) {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(configuredUrl);
+  } catch {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  const host = parsedUrl.hostname.toLowerCase();
+  if (host === "github.io" || host.endsWith(".github.io")) {
     return DEFAULT_API_BASE_URL;
   }
 
