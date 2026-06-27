@@ -2,14 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script>
-      (function () {
-        const redirect = new URLSearchParams(location.search).get("redirect");
-        if (redirect) {
-          history.replaceState(null, "", "%BASE_URL%" + redirect.slice(1));
-        }
-      })();
-    </script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
