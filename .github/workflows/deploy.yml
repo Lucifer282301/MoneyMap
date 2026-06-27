@@ -48,6 +48,8 @@ jobs:
 
       - name: Build project
         working-directory: frontend
+        env:
+          VITE_API_URL: https://mern-ai-moneymap-app.onrender.com/api
         run: npm run build
 
       - name: Upload artifact
