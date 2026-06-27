@@ -1,11 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://mern-ai-moneymap-app.onrender.com/api";
+const API_BASE_URL = (() => {
+  const envUrl = import.meta.env.VITE_API_URL;
 
-console.log("API_BASE_URL:", API_BASE_URL);
+  if (envUrl && envUrl.startsWith("http")) {
+    return envUrl;
+  }
+
+  return "https://mern-ai-moneymap-app.onrender.com/api";
+})();
+
+console.log("ENV VITE_API_URL:", import.meta.env.VITE_API_URL);
+console.log("FINAL API_BASE_URL:", API_BASE_URL);
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
