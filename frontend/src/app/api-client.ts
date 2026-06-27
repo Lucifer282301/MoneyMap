@@ -5,6 +5,8 @@ const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://mern-ai-moneymap-app.onrender.com/api";
 
+console.log("API_BASE_URL:", API_BASE_URL);
+
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   credentials: "include",
