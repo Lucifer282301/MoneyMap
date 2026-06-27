@@ -53,7 +53,6 @@ jobs:
           npm run build
         env:
           VITE_API_URL: https://mern-ai-moneymap-app.onrender.com/api
-        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
